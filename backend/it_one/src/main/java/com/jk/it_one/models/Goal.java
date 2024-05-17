@@ -1,8 +1,12 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jk.it_one.Interfaces.WithBalanceAndValue;
 import com.jk.it_one.enums.GoalKind;
 import com.jk.it_one.enums.IncomeKind;
+import com.jk.it_one.requestDtos.GoalDto;
+import com.jk.it_one.requestDtos.IncomeDto;
+import com.jk.it_one.utils.MoneyCalculator;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +17,12 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "goals")
-public class Goal {
+public class Goal implements WithBalanceAndValue {
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.PERSIST
+    )
     @JoinColumn(name = "balance_id")
     private Balance balance;
 
@@ -36,8 +43,24 @@ public class Goal {
     private GoalKind kind;
 
     @Column(name = "deadline")
-    private Date date;
+    private Date deadline;
 
-    @Column(name = "is_achievement")
-    boolean isAchievement;
+    @Column(name = "achieved")
+    boolean achieved;
+
+    public Goal() {
+    }
+
+    public Goal(GoalDto goalDto) {
+        this.value = "0";
+        this.patch(goalDto);
+    }
+
+    public void patch(GoalDto goalDto) {
+        this.goalValue = goalDto.getGoalValue();
+        this.description = goalDto.getDescription();
+        this.kind = goalDto.getKind();
+        this.deadline = goalDto.getDeadline();
+        this.achieved = MoneyCalculator.compare(value, goalValue) >= 0;
+    }
 }

@@ -4,13 +4,11 @@ import com.jk.it_one.enums.Currency;
 import com.jk.it_one.models.Income;
 import com.jk.it_one.requestDtos.IncomeDto;
 import com.jk.it_one.services.IncomeService;
-import com.jk.it_one.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 public class IncomeController {
@@ -22,34 +20,27 @@ public class IncomeController {
     }
 
     @PostMapping("/incomes")
-    ResponseEntity<?> addIncome(@RequestBody IncomeDto incomeDto, Principal principal, @RequestParam Currency currency) {
-        Income income = new Income(incomeDto);
-        return ResponseEntity.ok(incomeService.save(income, principal, currency, "0"));
+    Income addIncome(@RequestBody IncomeDto incomeDto, Principal principal, @RequestParam Currency currency) {
+        return incomeService.save(incomeDto, principal, currency);
     }
 
     @GetMapping("/incomes")
-    ResponseEntity<?> getIncomes(Principal principal, @RequestParam Currency currency) {
-        return ResponseEntity.ok(incomeService.findAll(principal, currency));
+    List<Income> getIncomes(Principal principal, @RequestParam Currency currency) {
+        return incomeService.findAll(principal, currency);
     }
 
     @GetMapping("/incomes/{id}")
-    ResponseEntity<?> getIncome(Principal principal, @PathVariable("id") long id) {
-        Income income = incomeService.findById(id, principal);
-        return income == null ?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Income with this id does not exist or not yours")
-                : ResponseEntity.ok(income);
+    Income getIncome(Principal principal, @PathVariable("id") long id) {
+        return incomeService.findById(id, principal);
     }
 
     @PatchMapping("/incomes/{id}")
-    ResponseEntity<?> patchIncome(@RequestBody IncomeDto incomeDto, Principal principal, @PathVariable("id") long id) {
-        Income income = incomeService.update(id, incomeDto, principal);
-        return income == null ?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Income with this id does not exist or not yours")
-                : ResponseEntity.ok(income);
+    Income patchIncome(@RequestBody IncomeDto incomeDto, Principal principal, @PathVariable("id") long id) {
+        return incomeService.update(id, incomeDto, principal);
     }
 
     @DeleteMapping("/incomes/{id}")
-    ResponseEntity<?> deleteIncome(Principal principal, @PathVariable("id") long id) {
+    String deleteIncome(Principal principal, @PathVariable("id") long id) {
         return incomeService.delete(id, principal);
     }
 }

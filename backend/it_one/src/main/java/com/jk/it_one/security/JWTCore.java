@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Component
-public class JWTCore { //TODO replace deprecated methods
+public class JWTCore { //TODO replace deprecated methods //TODO check expired??
     @Value("${it_one.app.secret}")
     private String jwtSigningKey;
 

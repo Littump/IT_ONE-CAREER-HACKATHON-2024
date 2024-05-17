@@ -8,78 +8,55 @@ import com.jk.it_one.repositories.IncomeRepository;
 import com.jk.it_one.requestDtos.IncomeDto;
 import com.jk.it_one.utils.MoneyCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
+import java.util.List;
 import java.security.Principal;
-import java.util.Objects;
 
 @Transactional
 @Service
-public class IncomeService {
+@Primary
+public class IncomeService extends CommonService {
     private final IncomeRepository incomeRepository;
-    private final UserService userService;
-    private final BalanceService balanceService;
 
     @Autowired
     public IncomeService(IncomeRepository incomeRepository, UserService userService, BalanceService balanceService) {
+        super(userService, balanceService);
         this.incomeRepository = incomeRepository;
-        this.userService = userService;
-        this.balanceService = balanceService;
+    }
+
+    public Income save(IncomeDto incomeDto, Principal principal, Currency currency) {
+        Income income = new Income(incomeDto);
+        return save(income, principal, currency, "0");
     }
 
     public Income save(Income income, Principal principal, Currency currency, String oldValue) {
-        User user = userService.findMe(principal);
-        Balance balance = balanceService.findUserBalance(user, currency);
-        if (balance == null) {
-            balance = new Balance(user, income.getValue(), currency);
-        } else {
-            balance.setBalance(MoneyCalculator.sub(MoneyCalculator.add(balance.getBalance(), income.getValue()), oldValue));
-        }
-        income.setBalance(balance);
-        return incomeRepository.save(income);
+        return saveWithBalanceUpdate(income, principal, currency, oldValue, incomeRepository::save);
+    }
+
+    public Income save(Income income, Balance balance, User user, Currency currency) {
+        return save(income, balance, user, currency, "0");
+    }
+
+    public Income save(Income income, Balance balance, User user, Currency currency, String oldValue) {
+        return saveWithBalanceUpdate(income, balance, user, currency, oldValue, incomeRepository::save);
     }
 
     public List<Income> findAll(Principal principal, Currency currency) {
-        User user = userService.findMe(principal);
-        Balance balance = balanceService.findUserBalance(user, currency);
-        return incomeRepository.findAllByBalance(balance);
+        return findAll(principal, currency, incomeRepository::findAllByBalance);
     }
 
     public Income findById(long id, Principal principal) {
-        User user = userService.findMe(principal);
-        Income income = incomeRepository.findById(id).orElse(null);
-        if (income != null) {
-            if (!Objects.equals(income.getBalance().getUser().getId(), user.getId())) {
-                return null;
-            }
-        }
-        return income;
-    }
-    
-    public Income update(long id, IncomeDto incomeDto, Principal principal) {
-        Income income = findById(id, principal);
-        if (income == null) {
-            return null;
-        }
-        String oldValue = income.getValue();
-        income.patch(incomeDto);
-        return save(income, principal, income.getBalance().getCurrency(), oldValue);
+        return findById(id, principal, incomeRepository::findById);
     }
 
-    public ResponseEntity<?> delete(long id, Principal principal) {
-        User user = userService.findMe(principal);
-        Income income = incomeRepository.findById(id).orElse(null);
-        if (income == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Income with this id does not exist or not yours");
-        }
-        if (!Objects.equals(income.getBalance().getUser().getId(), user.getId())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Income with this id does not exist or not yours");
-        }
-        incomeRepository.deleteById(id);
-        return ResponseEntity.ok("Successfully deleted");
+    public Income update(long id, IncomeDto incomeDto, Principal principal) {
+        return update(id, principal, incomeRepository::findById, income -> income.patch(incomeDto), incomeRepository::save);
+    }
+
+    public String delete(long id, Principal principal) {
+        return delete(id, principal, incomeRepository::findById, incomeRepository::deleteById, MoneyCalculator::sub);
     }
 }

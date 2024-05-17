@@ -22,16 +22,16 @@ public class Balance {
     private Long id;
 
     @Column(name = "balance")
-    String balance;
+    String value;
 
     @Column(name = "currency")
     Currency currency;
 
     public Balance() {
     }
-    public Balance(User user, String balance, Currency currency) {
+    public Balance(User user, String value, Currency currency) {
         this.user = user;
-        this.balance = balance;
+        this.value = value;
         this.currency = currency;
     }
 }

@@ -3,6 +3,7 @@ package com.jk.it_one.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jk.it_one.enums.IncomeKind;
 import com.jk.it_one.enums.Period;
+import com.jk.it_one.requestDtos.IncomePeriodDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,10 @@ import java.util.Date;
 @Table(name = "incomes_period")
 public class IncomePeriod {
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.PERSIST
+    )
     @JoinColumn(name = "balance_id")
     private Balance balance;
 
@@ -40,4 +44,16 @@ public class IncomePeriod {
 
     @Column(name = "period_kind")
     private Period periodKind;
+
+    public IncomePeriod() {
+    }
+
+    public IncomePeriod(IncomePeriodDto incomePeriodDto) {
+        this.value = incomePeriodDto.getValue();
+        this.kind = incomePeriodDto.getKind();
+        this.description = incomePeriodDto.getDescription();
+        this.startDay = incomePeriodDto.getStartDay();
+        this.periodValue = incomePeriodDto.getPeriodValue();
+        this.periodKind = incomePeriodDto.getPeriodKind();
+    }
 }

@@ -10,4 +10,8 @@ public class MoneyCalculator {
     public static String sub(String sum1, String sum2) {
         return new BigDecimal(sum1).subtract(new BigDecimal(sum2)).toString();
     }
+
+    public static int compare(String sum1, String sum2) {
+        return new BigDecimal(sum1).compareTo(new BigDecimal(sum2));
+    }
 }

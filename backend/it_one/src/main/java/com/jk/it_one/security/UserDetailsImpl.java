@@ -1,12 +1,14 @@
 package com.jk.it_one.security;
 
 import com.jk.it_one.models.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
+    @Getter
     private final Long id;
     private final String username;
     private final String password;
@@ -28,10 +30,6 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     @Override

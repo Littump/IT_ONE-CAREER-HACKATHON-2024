@@ -1,6 +1,7 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jk.it_one.Interfaces.WithBalanceAndValue;
 import com.jk.it_one.enums.IncomeKind;
 import com.jk.it_one.requestDtos.IncomeDto;
 import jakarta.persistence.*;
@@ -13,7 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "incomes")
-public class Income {
+public class Income implements WithBalanceAndValue {
     @JsonIgnore
     @ManyToOne(
             fetch = FetchType.EAGER,
@@ -44,6 +45,13 @@ public class Income {
 
     public Income(IncomeDto incomeDto) {
         this.patch(incomeDto);
+    }
+
+    public Income(IncomePeriod incomePeriod) {
+        this.value = incomePeriod.getValue();
+        this.kind = incomePeriod.getKind();
+        this.description = incomePeriod.getDescription();
+        this.date = new Date();
     }
 
     public void patch(IncomeDto incomeDto) {

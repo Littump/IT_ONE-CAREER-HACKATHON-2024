@@ -1,6 +1,7 @@
 package com.jk.it_one.services;
 
 import com.jk.it_one.enums.Currency;
+import com.jk.it_one.exceptions.EntityNotFoundException;
 import com.jk.it_one.models.Balance;
 import com.jk.it_one.models.User;
 import com.jk.it_one.repositories.UserRepository;
@@ -45,29 +46,23 @@ public class UserService implements UserDetailsService {
         return userRepository.existsByUsername(username);
     }
 
-
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    public User findMe(Principal principal) {
+    public User findMe(Principal principal) {//TODO
         String username = principal.getName();
         return userRepository.findUserByUsername(username).orElseThrow(() ->
-                new UsernameNotFoundException(String.format("User %s not found", username)));
+                new EntityNotFoundException("User %s not found".formatted(username)));
     }
 
-    public ProfileDto getUserProfile(Principal principal, Currency currency) {
+    public ProfileDto getUserProfile(Principal principal, Currency currency) {//TODO
         User user = findMe(principal);
         List<Balance> balances = balanceService.findUserBalances(user);
         String curBalance = balances.stream()
                 .filter(b -> b.getCurrency().equals(currency))
-                .map(Balance::getBalance)
+                .map(Balance::getValue)
                 .findFirst().orElse("0");
         String allBalance = balances.stream()
-                .map(Balance::getBalance)
+                .map(Balance::getValue)
                 .reduce(MoneyCalculator::add)
                 .orElse("0");
-        //TODO
         return null;
     }
 }
