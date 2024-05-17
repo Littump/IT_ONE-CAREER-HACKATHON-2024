@@ -1,6 +1,7 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jk.it_one.Interfaces.WithBalanceValueAndStartDay;
 import com.jk.it_one.enums.IncomeKind;
 import com.jk.it_one.enums.Period;
 import com.jk.it_one.requestDtos.IncomePeriodDto;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "incomes_period")
-public class IncomePeriod {
+public class IncomePeriod implements WithBalanceValueAndStartDay<IncomePeriod> {
     @JsonIgnore
     @ManyToOne(
             fetch = FetchType.EAGER,

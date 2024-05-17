@@ -21,7 +21,7 @@ import java.util.Objects;
 @Transactional
 @Service
 @Primary
-public class GoalService extends CommonService {
+public class GoalService extends CommonService<Goal> {
     private final GoalRepository goalRepository;
     private final GoalIncomeRepository goalIncomeRepository;
 
@@ -49,12 +49,12 @@ public class GoalService extends CommonService {
         return findById(id, principal, goalRepository::findById);
     }
 
-    public Goal update(long id, GoalDto goalDto, Principal principal) {
-        return update(id, principal, goalRepository::findById, goal -> goal.patch(goalDto), goalRepository::save);
+    public Goal update(long id, Goal newGoal, Principal principal) {
+        return update(id, principal, goalRepository::findById, goal -> goal.patch(newGoal), goalRepository::save);
     }
 
     public String delete(long id, Principal principal) {
-        return delete(id, principal, goalRepository::findById, goalRepository::deleteById, MoneyCalculator::add);
+        return delete(id, principal, goalRepository::findById, goalRepository::deleteById, true);
     }
 
     public GoalIncome saveGoalIncome(GoalIncome goalIncome, Principal principal, long id) {

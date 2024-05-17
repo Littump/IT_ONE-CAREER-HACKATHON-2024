@@ -21,7 +21,8 @@ public class IncomeController {
 
     @PostMapping("/incomes")
     Income addIncome(@RequestBody IncomeDto incomeDto, Principal principal, @RequestParam Currency currency) {
-        return incomeService.save(incomeDto, principal, currency);
+        Income income = new Income(incomeDto);
+        return incomeService.save(income, principal, currency);
     }
 
     @GetMapping("/incomes")
@@ -36,7 +37,8 @@ public class IncomeController {
 
     @PatchMapping("/incomes/{id}")
     Income patchIncome(@RequestBody IncomeDto incomeDto, Principal principal, @PathVariable("id") long id) {
-        return incomeService.update(id, incomeDto, principal);
+        Income income = new Income(incomeDto);
+        return incomeService.update(id, income, principal);
     }
 
     @DeleteMapping("/incomes/{id}")

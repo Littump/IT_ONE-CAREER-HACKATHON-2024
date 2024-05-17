@@ -14,7 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "incomes")
-public class Income implements WithBalanceAndValue {
+public class Income implements WithBalanceAndValue<Income> {
     @JsonIgnore
     @ManyToOne(
             fetch = FetchType.EAGER,
@@ -59,5 +59,13 @@ public class Income implements WithBalanceAndValue {
         this.kind = incomeDto.getKind();
         this.description = incomeDto.getDescription();
         this.date = incomeDto.getDate();
+    }
+
+    @Override
+    public void patch(Income newValue) {
+        this.value = newValue.getValue();
+        this.kind = newValue.getKind();
+        this.description = newValue.getDescription();
+        this.date = newValue.getDate();
     }
 }

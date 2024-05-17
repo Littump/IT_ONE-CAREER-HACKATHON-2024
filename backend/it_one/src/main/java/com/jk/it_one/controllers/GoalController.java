@@ -39,7 +39,8 @@ public class GoalController {
 
     @PatchMapping("/goals/{id}")
     Goal patchGoal(@RequestBody GoalDto goalDto, Principal principal, @PathVariable("id") long id) {
-        return goalService.update(id, goalDto, principal);
+        Goal goal = new Goal(goalDto);
+        return goalService.update(id, goal, principal);
     }
 
     @DeleteMapping("/goals/{id}")

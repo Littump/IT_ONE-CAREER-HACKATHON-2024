@@ -17,7 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "goals")
-public class Goal implements WithBalanceAndValue {
+public class Goal implements WithBalanceAndValue<Goal> {
     @JsonIgnore
     @ManyToOne(
             fetch = FetchType.EAGER,
@@ -53,14 +53,18 @@ public class Goal implements WithBalanceAndValue {
 
     public Goal(GoalDto goalDto) {
         this.value = "0";
-        this.patch(goalDto);
-    }
-
-    public void patch(GoalDto goalDto) {
         this.goalValue = goalDto.getGoalValue();
         this.description = goalDto.getDescription();
         this.kind = goalDto.getKind();
         this.deadline = goalDto.getDeadline();
+        this.achieved = MoneyCalculator.compare(value, goalValue) >= 0;
+    }
+
+    public void patch(Goal goal) {
+        this.goalValue = goal.getGoalValue();
+        this.description = goal.getDescription();
+        this.kind = goal.getKind();
+        this.deadline = goal.getDeadline();
         this.achieved = MoneyCalculator.compare(value, goalValue) >= 0;
     }
 }

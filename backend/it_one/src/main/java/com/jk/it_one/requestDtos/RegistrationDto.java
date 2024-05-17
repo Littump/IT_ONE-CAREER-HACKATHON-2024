@@ -14,7 +14,4 @@ public class RegistrationDto {
 
     @JsonProperty("password")
     private String password;
-
-    @JsonProperty("currency")
-    private Currency currency;
 }
