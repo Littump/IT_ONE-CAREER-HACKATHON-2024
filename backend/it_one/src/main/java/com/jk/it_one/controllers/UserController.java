@@ -9,6 +9,7 @@ import com.jk.it_one.requestDtos.UserPatchDto;
 import com.jk.it_one.responceDtos.ProfileDto;
 import com.jk.it_one.security.JWTCore;
 import com.jk.it_one.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    User createUser(@RequestBody RegistrationDto registrationDto) {
+    public User createUser(@Valid @RequestBody RegistrationDto registrationDto) {
         if (userService.existsByUsername(registrationDto.getUsername())) {
             throw new UserExistException(registrationDto.getUsername());
         }
@@ -45,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping("/auth/token/login")
-    String signIn(@RequestBody AuthorisationDto authorisationDto) {
+    public String signIn(@Valid @RequestBody AuthorisationDto authorisationDto) {
         Authentication authentication;
         authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @PatchMapping("/users/me")
-    User updateUser(Principal principal, @RequestBody UserPatchDto fieldsForChange) {
+    public User updateUser(Principal principal, @Valid @RequestBody UserPatchDto fieldsForChange) {
         User currentMe = userService.findMe(principal);
         if (fieldsForChange.getPassword() != null) {
             fieldsForChange.setPassword(passwordEncoder.encode(fieldsForChange.getPassword()));
@@ -66,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    ProfileDto getProfile(Principal principal, @RequestParam Currency currency) {
+    public ProfileDto getProfile(Principal principal, @RequestParam Currency currency) {
         return userService.getUserProfile(principal, currency);
     }
 }

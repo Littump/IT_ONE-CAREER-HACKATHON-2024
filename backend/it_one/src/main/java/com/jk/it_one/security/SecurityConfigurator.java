@@ -56,7 +56,7 @@ public class SecurityConfigurator {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) //TODO можно влючить (Это доп безопасность приложения)
+                .csrf(AbstractHttpConfigurer::disable) //TODO нужно включить (Это доп безопасность приложения)
                 .cors(httpSecurityCorsConfigurer ->
                         httpSecurityCorsConfigurer.configurationSource(_ ->
                                 new CorsConfiguration().applyPermitDefaultValues()))

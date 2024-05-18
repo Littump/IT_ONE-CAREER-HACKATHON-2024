@@ -14,8 +14,11 @@ import lombok.Setter;
 @Table(name = "balances")
 public class Balance {
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.PERSIST
+    )
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
 
 
@@ -25,11 +28,11 @@ public class Balance {
     private Long id;
 
     @JsonProperty("balance")
-    @Column(name = "balance")
+    @Column(name = "balance", nullable = false)
     String value;
 
     @JsonProperty("currency")
-    @Column(name = "currency")
+    @Column(name = "currency", nullable = false)
     Currency currency;
 
     public Balance() {
