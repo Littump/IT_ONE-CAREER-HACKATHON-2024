@@ -14,7 +14,7 @@
 	<name>it_one</name>
 	<description>IT_ONE CAREER HACKATHON backend</description>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -73,6 +73,23 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<buildpacks>
+							<buildpack>paketobuildpacks/ca-certificates:3.7.0</buildpack>
+							<buildpack>paketobuildpacks/bellsoft-liberica:10.7.2</buildpack>
+							<buildpack>paketobuildpacks/syft:1.46.0</buildpack>
+							<buildpack>paketobuildpacks/executable-jar:6.9.0</buildpack>
+							<buildpack>paketobuildpacks/dist-zip:5.7.0</buildpack>
+							<buildpack>paketobuildpacks/spring-boot:5.29.1</buildpack>
+						</buildpacks>
+					</image>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.6.0</version>
 			</plugin>
 		</plugins>
 	</build>

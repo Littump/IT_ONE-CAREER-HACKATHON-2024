@@ -58,12 +58,12 @@ public class SecurityConfigurator {
         http
                 .csrf(AbstractHttpConfigurer::disable) //TODO нужно включить (Это доп безопасность приложения)
                 .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(_ ->
+                        httpSecurityCorsConfigurer.configurationSource((p) ->
                                 new CorsConfiguration().applyPermitDefaultValues()))
 //                .exceptionHandling(exceptions -> exceptions
 //                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/users", "/auth/token/login").permitAll()
+                        .requestMatchers("/api/users", "/api/auth/token/login").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
