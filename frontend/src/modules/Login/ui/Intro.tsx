@@ -5,7 +5,7 @@ import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 const Intro = () => {
   const { t } = useTypedTranslation();
   return (
-    <div className="flex flex-col w-full md:flex-row gap-14 md:gap-7 md:items-center px-4 py-16 max-w-2xl mx-auto">
+    <div className="flex flex-col w-full md:flex-row md:mt-20 gap-14 md:gap-7 md:items-center px-4 py-16 max-w-4xl my-auto mx-auto">
       <div className="md:w-1/2">
         <img src={img} alt="" className="w-full" />
       </div>

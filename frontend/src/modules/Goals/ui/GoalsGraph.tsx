@@ -3,52 +3,27 @@ import ReactApexChart from "react-apexcharts";
 import { IGoal } from "@/modules/Goals/types/goal.ts";
 import { Typography } from "@material-tailwind/react";
 import useGetCurrency from "@/helpers/useGetCurrency.ts";
+import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 
 const GoalGraph = () => {
+  const { t } = useTypedTranslation();
   const currency = useGetCurrency();
   const goals: IGoal[] = [
     {
-      type: "gift",
+      kind: "gift",
       description: "Подарок маме",
       value: 500,
       goal_value: 15000,
-      is_achievement: false,
-      date: "22-01-2023",
+      achieved: false,
+      deadline: "22-01-2023",
       id: 1,
     },
-    {
-      type: "egg",
-      description: "На всякий",
-      value: 20000,
-      goal_value: 100000,
-      is_achievement: false,
-      date: "22-01-2023",
-      id: 2,
-    },
-    {
-      type: "travel",
-      description: "Анапа",
-      value: 2500,
-      goal_value: 30000,
-      is_achievement: false,
-      date: "22-01-2023",
-      id: 3,
-    },
-    {
-      type: "goal",
-      description: "Книга",
-      value: 2000,
-      goal_value: 2000,
-      is_achievement: true,
-      date: "22-01-2023",
-      id: 4,
-    },
   ];
-  const countAchieved = goals.reduce((sum, el) => sum + +el.is_achievement, 0);
+  const countAchieved = goals.reduce((sum, el) => sum + +el.achieved, 0);
   const sumOfValue = goals.reduce((sum, el) => sum + +el.value, 0);
   const sumOfGoalValue = goals.reduce((sum, el) => sum + +el.goal_value, 0);
   const colors = ["#cad2c5", "#008000"];
-  const labels = ["Осталось достичь", "Достигнуто"];
+  const labels = [t("remains-to-achieve"), t("achieved")];
   const series = [goals.length - countAchieved, countAchieved];
 
   const options: ApexOptions = {
@@ -88,7 +63,7 @@ const GoalGraph = () => {
   return (
     <div>
       <div className="border border-gray-300 rounded-xl py-4 px-6 text-center flex flex-col gap-4">
-        <Typography variant="h3">Достигнутых целей</Typography>
+        <Typography variant="h3">{t("achieved-goals")}</Typography>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <ReactApexChart
@@ -100,13 +75,13 @@ const GoalGraph = () => {
           </div>
           <div className="text-start flex flex-col gap-2">
             <span>
-              <Typography variant="paragraph">Всего пополнено:</Typography>
+              <Typography variant="paragraph">{t("total-income")}:</Typography>
               <Typography variant="h5">
                 {sumOfValue} {currency}
               </Typography>
             </span>
             <span>
-              <Typography variant="paragraph">Всего Нужно:</Typography>
+              <Typography variant="paragraph">{t("total-need")}:</Typography>
               <Typography variant="h5">
                 {sumOfGoalValue} {currency}
               </Typography>

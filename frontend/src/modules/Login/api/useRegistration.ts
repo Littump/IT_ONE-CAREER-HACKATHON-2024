@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import loginService from "./loginService.ts";
-import {Logindto} from "@/modules/Login/types/dto.ts";
+import { RegistrationDto } from "@/modules/Login/types/dto.ts";
 
-export const useLogin = () =>
+export const useRegistration = () =>
   useMutation({
-    mutationFn: (body: Logindto) => loginService.login(body),
+    mutationFn: (body: RegistrationDto) => loginService.registration(body),
   });

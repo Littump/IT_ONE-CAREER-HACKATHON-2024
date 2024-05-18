@@ -4,6 +4,7 @@ import { IGoal } from "@/modules/Goals/types/goal.ts";
 import GoalItemMin from "@/modules/Goals/ui/GoalItemMin.tsx";
 import AddGoalItem from "@/modules/Goals/ui/AddGoalItem.tsx";
 import { useState } from "react";
+import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 
 interface Props {
   isFull?: boolean;
@@ -12,52 +13,15 @@ interface Props {
 const Goals = ({ isFull = true }: Props) => {
   const [showAll, setShowAll] = useState(!isFull);
 
-  const goals: IGoal[] = [
-    {
-      type: "gift",
-      description: "Подарок маме",
-      value: 500,
-      goal_value: 15000,
-      is_achievement: false,
-      date: "22-01-2023",
-      id: 1,
-    },
-    {
-      type: "egg",
-      description: "На всякий",
-      value: 20000,
-      goal_value: 100000,
-      is_achievement: false,
-      date: "22-01-2023",
-      id: 2,
-    },
-    {
-      type: "travel",
-      description: "Анапа",
-      value: 2500,
-      goal_value: 30000,
-      is_achievement: false,
-      date: "22-01-2023",
-      id: 3,
-    },
-    {
-      type: "goal",
-      description: "Книга",
-      value: 2000,
-      goal_value: 2000,
-      is_achievement: true,
-      date: "22-01-2023",
-      id: 4,
-    },
-  ];
-
+  const { t } = useTypedTranslation();
+  const goals: IGoal[] = [];
   return (
     <div className="rounded-2xl py-6 px-4 border border-gray-300">
       {isFull ? (
         <>
           <div className="flex justify-between items-center">
             <Typography variant="h5" className="font-semibold">
-              Цели
+              {t("goals")}
             </Typography>
             <NavLink
               to="/goals"
@@ -81,18 +45,18 @@ const Goals = ({ isFull = true }: Props) => {
           </div>
           <NavLink to="/addGoal">
             <Button className="rounded-full my-2" size="sm">
-              Добавить
+              {t("add")}
             </Button>
           </NavLink>
           <button
             onClick={() => setShowAll((prev) => !prev)}
             className="text-blue-gray-700 underline text-sm ml-4"
           >
-            {showAll ? "Скрыть" : "Показать все"}
+            {showAll ? t("hide") : t("show-all")}
           </button>
         </>
       ) : (
-        <Typography variant="h5">Ваши цели</Typography>
+        <Typography variant="h5">{t("your-goals")}</Typography>
       )}
       <div className="my-4 flex flex-col ">
         {goals.slice(0, showAll ? goals.length : 2).map((el) => (

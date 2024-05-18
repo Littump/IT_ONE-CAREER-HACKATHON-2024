@@ -1,15 +1,17 @@
 import { Typography } from "@material-tailwind/react";
 import useGetCurrency from "@/helpers/useGetCurrency.ts";
+import {useTypedTranslation} from "@/helpers/useTypedTranslation.ts";
 
 const Balance = () => {
   const now = new Date();
   const hours = now.getHours();
+  const {t} = useTypedTranslation()
   const hello =
     hours >= 18
-      ? "Добрый вечер!"
+      ? t("good-evening")
       : hours >= 12
-        ? "Добрый день!"
-        : "Доброе утро!";
+        ? t("good-day")
+        :t("good-morning");
   const sum = 123;
   const currency = useGetCurrency();
   return (
@@ -18,12 +20,12 @@ const Balance = () => {
         {hello}
       </Typography>
       <Typography variant="paragraph" className="text-gray-600">
-        У вас{" "}
+          {t("you-have")}{" "}
         <span className="text-gray-900">
           {sum}
           {currency}
         </span>{" "}
-        на балансе
+          {t("on-your-balance")}
       </Typography>
     </div>
   );

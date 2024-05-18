@@ -6,25 +6,10 @@ on:
       - ASTABLE
 
 jobs:
-  tests:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python3
-
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-
-      - name: Install dependencies for Python
-        run: |
-          pip install -r backend/requirements.txt
 
   build_and_push_to_docker_hub:
     name: Build and push docker image to docker hub
     runs-on: ubuntu-latest
-    needs: tests
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -46,8 +31,8 @@ jobs:
       - name: Push python backend file docker to docker hub
         uses: docker/build-push-action@v4
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
+          context: ./backend/it_one
+          file: ./backend/it_one/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/backend_project:latest
 
@@ -67,8 +52,40 @@ jobs:
             sudo docker compose pull
             sudo docker compose down
             sudo docker compose up -d
-            sudo docker exec site-backend-1 python manage.py makemigrations
-            sudo docker exec site-backend-1 python manage.py migrate
+
+  deploy-2:
+    name: Deploy image
+    runs-on: ubuntu-latest
+    needs: build_and_push_to_docker_hub
+    steps:
+      - name: deploy on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST2 }}
+          username: ${{ secrets.USER2 }}
+          password: ${{ secrets.PASSPHRASE2 }}
+          script: |
+            cd site
+            sudo docker compose pull
+            sudo docker compose down
+            sudo docker compose up -d
+
+  deploy-3:
+    name: Deploy image
+    runs-on: ubuntu-latest
+    needs: build_and_push_to_docker_hub
+    steps:
+      - name: deploy on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST3 }}
+          username: ${{ secrets.USER3 }}
+          password: ${{ secrets.PASSPHRASE3 }}
+          script: |
+            cd site
+            sudo docker compose pull
+            sudo docker compose down
+            sudo docker compose up -d
 
   send_message_telegram:
     name: message in tg

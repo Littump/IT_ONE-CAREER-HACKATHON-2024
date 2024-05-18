@@ -4,12 +4,14 @@ import { IncomeType } from "@/modules/Operations/types/income.ts";
 import { ExpenseType } from "@/modules/Operations/types/expense.ts";
 import { useParams } from "react-router-dom";
 import ChooseOperationItem from "@/modules/Operations/ui/ChooseOperationItem.tsx";
+import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 
 const AddOperationChooseType = () => {
   const { kind, periodic } = useParams<{
     kind: "expenses" | "incomes";
     periodic: "periodic" | "oneTime";
   }>();
+  const { t } = useTypedTranslation();
   const incomes: IncomeType[] = [
     "salary",
     "business",
@@ -32,7 +34,7 @@ const AddOperationChooseType = () => {
     <div className="flex flex-col gap-6">
       <BackLink to={`/addOperation/${periodic}`} />
       <Typography variant="h4" className="font-semibold">
-        Какой тип операции вас интересует?
+        {t("which-operation-type-you-want-to-add")}
       </Typography>
       <div>
         {kind &&

@@ -3,7 +3,6 @@ import BackLink from "@/ui/BackLink.tsx";
 import { Button, Input, Typography } from "@material-tailwind/react";
 import Emoji from "@/ui/Emoji.tsx";
 import { Field, Form, Formik } from "formik";
-import { useTranslation } from "react-i18next";
 import DateInput from "@/ui/DateInput.tsx";
 import {
   EXPENSE_EMOJIS,
@@ -14,6 +13,7 @@ import {
   IncomeType,
 } from "@/modules/Operations/types/income.ts";
 import Dropdown from "@/ui/Dropdown.tsx";
+import {useTypedTranslation} from "@/helpers/useTypedTranslation.ts";
 
 const AddOperationForm = () => {
   const { periodic, type, kind } = useParams<{
@@ -23,7 +23,7 @@ const AddOperationForm = () => {
   }>();
   const isPeriodic = periodic === "periodic";
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTypedTranslation();
 
   const handleSubmit = () => {
     navigate("/");
@@ -42,11 +42,11 @@ const AddOperationForm = () => {
     period_value: 1,
   };
   return (
-    <div className="flex flex-col gap-6 md:max-w-xl mx-auto">
+    <div className="flex flex-col gap-6 md:max-w-xl mx-auto ">
       <div className="flex  w-full text-center">
         <BackLink to={"/addOperation/" + kind} />
         <Typography variant="h6" className="w-2/3 mx-auto">
-          Добавить {kind === "expenses" ? "расход" : "доход"}
+          {t("add")} {kind === "expenses" ? t("expense") : t("income")}
         </Typography>
       </div>
       <div className="flex items-center gap-4">
@@ -60,21 +60,21 @@ const AddOperationForm = () => {
         {({ values, setFieldValue }) => {
           return (
             <Form className="flex gap-6 flex-col">
-              <Input label="Сумма" />
-              <Input label="Описание" />
               <DateInput
-                placeholder="Дата списания/пополнения"
-                value={values.date}
-                setFieldValue={setFieldValue}
-                name="date"
+                  placeholder={t("date-of-debiting/replenishment")}
+                  value={values.date}
+                  setFieldValue={setFieldValue}
+                  name="date"
               />
+              <Input label={t("goal-sum")} />
+              <Input label={t("description")} />
               {isPeriodic && (
                 <div className="flex gap-2 w-full items-center">
                   <Typography
                     variant="paragraph"
                     className="w-1/2 text-sm font-semibold pl-4 text-blue-gray-700"
                   >
-                    Повторять каждые
+                    {t("repeat-every")}
                   </Typography>
                   <Field
                     name="period_value"
@@ -88,11 +88,11 @@ const AddOperationForm = () => {
                     items={period_kind_list}
                     onClick={(el) => setFieldValue("kind", el)}
                   >
-                    {values.kind ? values.kind : "частота"}
+                    {values.kind ? values.kind : t("replenishment-frequency")}
                   </Dropdown>
                 </div>
               )}
-              <Button type="submit">Добавить</Button>
+              <Button type="submit">{t("add")}</Button>
             </Form>
           );
         }}
