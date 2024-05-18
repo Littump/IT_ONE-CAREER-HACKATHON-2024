@@ -10,6 +10,7 @@ import com.jk.it_one.requestDtos.GoalDto;
 import com.jk.it_one.requestDtos.GoalIncomeDto;
 import com.jk.it_one.utils.MoneyCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class GoalService extends CommonService<Goal> {
 
     @Autowired
     public GoalService(
-            UserService userService,
+            @Lazy UserService userService,
             BalanceService balanceService,
             GoalRepository goalRepository,
             GoalIncomeRepository goalIncomeRepository
@@ -43,6 +44,10 @@ public class GoalService extends CommonService<Goal> {
 
     public List<Goal> findAll(Principal principal, Currency currency) {
         return findAll(principal, currency, goalRepository::findAllByBalance);
+    }
+
+    public List<Goal> findAll(Balance balance) {
+        return goalRepository.findAllByBalance(balance);
     }
 
     public Goal findById(long id, Principal principal) {

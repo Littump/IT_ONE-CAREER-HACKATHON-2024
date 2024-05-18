@@ -1,7 +1,7 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.Interfaces.WithBalanceValueAndStartDay;
+import com.jk.it_one.interfaces.WithBalanceValueAndStartDay;
 import com.jk.it_one.enums.IncomeKind;
 import com.jk.it_one.enums.Period;
 import com.jk.it_one.requestDtos.IncomePeriodDto;

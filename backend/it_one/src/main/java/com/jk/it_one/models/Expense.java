@@ -1,7 +1,7 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.Interfaces.WithBalanceAndValue;
+import com.jk.it_one.interfaces.WithBalanceAndValue;
 import com.jk.it_one.enums.ExpenseKind;
 import com.jk.it_one.requestDtos.ExpenseDto;
 import jakarta.persistence.*;

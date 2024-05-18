@@ -1,6 +1,6 @@
 package com.jk.it_one.services;
 
-import com.jk.it_one.Interfaces.WithBalanceAndValue;
+import com.jk.it_one.interfaces.WithBalanceAndValue;
 import com.jk.it_one.enums.Currency;
 import com.jk.it_one.exceptions.EntityNotFoundException;
 import com.jk.it_one.exceptions.NotEnoughMoneyException;
@@ -8,6 +8,7 @@ import com.jk.it_one.models.Balance;
 import com.jk.it_one.models.User;
 import com.jk.it_one.utils.MoneyCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -23,7 +24,7 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     protected final BalanceService balanceService;
 
     @Autowired
-    public CommonService(UserService userService, BalanceService balanceService) {
+    public CommonService(@Lazy UserService userService, BalanceService balanceService) {
         this.userService = userService;
         this.balanceService = balanceService;
     }
@@ -32,26 +33,19 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     protected T saveWithBalanceUpdate(
             T entity,
             Balance balance,
-            User user,
-            Currency currency,
             String oldValue,
             Function<T, T> saver
     ) {
-        return saveWithBalanceUpdate(entity, balance, user, currency, oldValue, saver, false);
+        return saveWithBalanceUpdate(entity, balance, oldValue, saver, false);
     }
 
     protected T saveWithBalanceUpdate(
             T entity,
             Balance balance,
-            User user,
-            Currency currency,
             String oldValue,
             Function<T, T> saver,
             boolean reversed
     ) {
-        if (balance == null) {
-            balance = new Balance(user, "0", currency);
-        }
         balance.setValue(reversed ? (MoneyCalculator.add(MoneyCalculator.sub(balance.getValue(), entity.getValue()), oldValue))
                 : MoneyCalculator.sub(MoneyCalculator.add(balance.getValue(), entity.getValue()), oldValue));
         if (MoneyCalculator.compare(balance.getValue(), "0") < 0) {
@@ -81,7 +75,7 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     ) {
         User user = userService.findMe(principal);
         Balance balance = balanceService.findUserBalance(user, currency);
-        return saveWithBalanceUpdate(entity, balance, user, currency, oldValue, saver, reversed);
+        return saveWithBalanceUpdate(entity, balance, oldValue, saver, reversed);
     }
 
     protected List<T> findAll(
@@ -90,6 +84,13 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
             Function<Balance, List<T>> saver
     ) {
         Balance balance = balanceService.findUserBalance(principal, currency);
+        return saver.apply(balance);
+    }
+
+    protected List<T> findAll(
+            Balance balance,
+            Function<Balance, List<T>> saver
+    ) {
         return saver.apply(balance);
     }
 
@@ -136,8 +137,7 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
         T entity = findById(id, user, finder);
         String oldValue = entity.getBalance().getValue();
         patcher.accept(entity);
-        Balance balance = entity.getBalance();
-        saveWithBalanceUpdate(entity, entity.getBalance(), user, balance.getCurrency(), oldValue, saver, reversed);
+        saveWithBalanceUpdate(entity, entity.getBalance(), oldValue, saver, reversed);
         return entity;
     }
 

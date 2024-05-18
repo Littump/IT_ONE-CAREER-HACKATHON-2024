@@ -1,13 +1,11 @@
-package com.jk.it_one.Interfaces;
+package com.jk.it_one.interfaces;
 
 import com.jk.it_one.models.Balance;
 
-import java.util.Date;
-
-public interface WithBalanceValueAndStartDay<T> {
-    Date getStartDay();
+public interface WithBalanceAndValue<T> { //TODO maybe rename?
     Balance getBalance();
     void setBalance(Balance balance);
     String getValue();
     void setValue(String value);
+    void patch(T newValue);
 }

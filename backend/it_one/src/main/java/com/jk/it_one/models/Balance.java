@@ -1,6 +1,7 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jk.it_one.enums.Currency;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,13 +18,17 @@ public class Balance {
     @JoinColumn(name = "user_id")
     User user;
 
+
+    @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("balance")
     @Column(name = "balance")
     String value;
 
+    @JsonProperty("currency")
     @Column(name = "currency")
     Currency currency;
 

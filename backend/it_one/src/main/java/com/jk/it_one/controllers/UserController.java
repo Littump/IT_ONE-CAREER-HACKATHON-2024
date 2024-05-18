@@ -6,10 +6,11 @@ import com.jk.it_one.models.User;
 import com.jk.it_one.requestDtos.AuthorisationDto;
 import com.jk.it_one.requestDtos.RegistrationDto;
 import com.jk.it_one.requestDtos.UserPatchDto;
+import com.jk.it_one.responceDtos.ProfileDto;
 import com.jk.it_one.security.JWTCore;
 import com.jk.it_one.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,7 @@ public class UserController {
     private final JWTCore jwtCore;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTCore jwtCore) {
+    public UserController(@Lazy UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTCore jwtCore) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -54,11 +55,6 @@ public class UserController {
         return jwtCore.generateToken(authentication);
     }
 
-    @GetMapping("/profile")
-    ResponseEntity<?> getProfile(Principal principal, @RequestParam Currency currency) {
-        return ResponseEntity.ok(userService.getUserProfile(principal, currency)); //TODO
-    }
-
     @PatchMapping("/users/me")
     User updateUser(Principal principal, @RequestBody UserPatchDto fieldsForChange) {
         User currentMe = userService.findMe(principal);
@@ -67,5 +63,10 @@ public class UserController {
         }
         currentMe.patch(fieldsForChange);
         return userService.save(currentMe);
+    }
+
+    @GetMapping("/profile")
+    ProfileDto getProfile(Principal principal, @RequestParam Currency currency) {
+        return userService.getUserProfile(principal, currency);
     }
 }

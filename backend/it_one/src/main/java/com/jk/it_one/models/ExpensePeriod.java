@@ -1,7 +1,7 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.Interfaces.WithBalanceValueAndStartDay;
+import com.jk.it_one.interfaces.WithBalanceValueAndStartDay;
 import com.jk.it_one.enums.ExpenseKind;
 import com.jk.it_one.enums.Period;
 import com.jk.it_one.requestDtos.ExpensePeriodDto;
@@ -37,7 +37,7 @@ public class ExpensePeriod implements WithBalanceValueAndStartDay<ExpensePeriod>
     @Column(name = "description")
     private String description;
 
-    @Column(name = "start_day")
+    @Column(name = "date")
     private Date startDay;
 
     @Column(name = "period_value")
