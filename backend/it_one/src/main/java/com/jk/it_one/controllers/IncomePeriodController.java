@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@RequestMapping("/api")
+@RequestMapping("/api/incomes_period")
 @RestController
 public class IncomePeriodController {
     private final IncomePeriodService incomePeriodService;
@@ -21,23 +21,23 @@ public class IncomePeriodController {
         this.incomePeriodService = incomePeriodService;
     }
 
-    @PostMapping("/incomes_period")
+    @PostMapping
     IncomePeriod addIncomePeriod(@Valid @RequestBody IncomePeriodDto incomePeriodDto, Principal principal, @RequestParam Currency currency) {
         IncomePeriod incomePeriod = new IncomePeriod(incomePeriodDto);
         return incomePeriodService.save(incomePeriod, principal, currency);
     }
 
-    @GetMapping("/incomes_period")
+    @GetMapping
     List<IncomePeriod> getIncomesPeriod(Principal principal, @RequestParam Currency currency) {
         return incomePeriodService.findAll(principal, currency);
     }
 
-    @GetMapping("/incomes_period/{id}")
+    @GetMapping("/{id}")
     IncomePeriod getIncomePeriod(Principal principal, @PathVariable("id") long id) {
         return incomePeriodService.findById(id, principal);
     }
 
-    @DeleteMapping("/incomes_period/{id}")
+    @DeleteMapping("/{id}")
     String deleteIncomePeriod(Principal principal, @PathVariable("id") long id) {
         return incomePeriodService.delete(id, principal);
     }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@RequestMapping("/api")
+@RequestMapping("/api/goals")
 @RestController
 public class GoalController {
     private final GoalService goalService;
@@ -24,55 +24,55 @@ public class GoalController {
         this.goalService = goalService;
     }
 
-    @PostMapping("/goals")
+    @PostMapping
     Goal addGoal(@Valid @RequestBody GoalDto goalDto, Principal principal, @RequestParam Currency currency) {
         Goal goal = new Goal(goalDto);
         return goalService.save(goal, principal, currency);
     }
 
-    @GetMapping("/goals")
+    @GetMapping
     List<Goal> getGoals(Principal principal, @RequestParam Currency currency) {
         return goalService.findAll(principal, currency);
     }
 
-    @GetMapping("/goals/{id}")
+    @GetMapping("/{id}")
     Goal getGaol(Principal principal, @PathVariable("id") long id) {
         return goalService.findById(id, principal);
     }
 
-    @PatchMapping("/goals/{id}")
+    @PatchMapping("/{id}")
     Goal patchGoal(@Valid @RequestBody GoalPatchDto goalDto, Principal principal, @PathVariable("id") long id) {
         Goal goal = new Goal(goalDto);
         return goalService.update(id, goal, principal);
     }
 
-    @DeleteMapping("/goals/{id}")
+    @DeleteMapping("/{id}")
     String deleteGoal(Principal principal, @PathVariable("id") long id) {
         return goalService.delete(id, principal);
     }
 
-    @PostMapping("/goals/{id}/incomes")
+    @PostMapping("/{id}/incomes")
     GoalIncome addGoalIncome(@Valid @RequestBody GoalIncomeDto goalIncomeDto, Principal principal, @PathVariable("id") long id) {
         GoalIncome goal = new GoalIncome(goalIncomeDto);
         return goalService.saveGoalIncome(goal, principal, id);
     }
 
-    @GetMapping("/goals/{id}/incomes")
+    @GetMapping("/{id}/incomes")
     List<GoalIncome> getGoalIncomes(Principal principal, @PathVariable("id") long id) {
         return goalService.findAllGoalIncomes(principal, id);
     }
 
-    @GetMapping("/goals/{goalId}/incomes/{goalIncomeId}")
+    @GetMapping("/{goalId}/incomes/{goalIncomeId}")
     GoalIncome getGoalIncome(Principal principal, @PathVariable("goalId") long goalId, @PathVariable("goalIncomeId") long goalIncomeId) {
         return goalService.findGoalIncomeById(principal, goalId, goalIncomeId);
     }
 
-    @PatchMapping("/goals/{goalId}/incomes/{goalIncomeId}")
+    @PatchMapping("/{goalId}/incomes/{goalIncomeId}")
     GoalIncome patchGoalIncome(@Valid @RequestBody GoalIncomeDto goalIncomeDto, Principal principal, @PathVariable("goalId") long goalId, @PathVariable("goalIncomeId") long goalIncomeId) {
         return goalService.updateGoalIncome(goalId, goalIncomeId, goalIncomeDto, principal);
     }
 
-    @DeleteMapping("/goals/{goalId}/incomes/{goalIncomeId}")
+    @DeleteMapping("/{goalId}/incomes/{goalIncomeId}")
     String deleteGoalIncome(Principal principal, @PathVariable("goalId") long goalId, @PathVariable("goalIncomeId") long goalIncomeId) {
         return goalService.deleteGoalIncome(goalId, goalIncomeId, principal);
     }
