@@ -18,17 +18,17 @@ public class GoalIncome {
             fetch = FetchType.EAGER,
             cascade = CascadeType.PERSIST
     )
-    @JoinColumn(name = "goal_id")
+    @JoinColumn(name = "goal_id", nullable = false)
     private Goal goal;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "value")
+    @Column(name = "value", nullable = false)
     private String value;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private Date date;
 
     public GoalIncome() {

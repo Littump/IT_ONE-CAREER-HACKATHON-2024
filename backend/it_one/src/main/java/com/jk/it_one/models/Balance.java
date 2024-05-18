@@ -1,6 +1,7 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jk.it_one.enums.Currency;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,18 +14,25 @@ import lombok.Setter;
 @Table(name = "balances")
 public class Balance {
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.PERSIST
+    )
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
 
+
+    @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "balance")
+    @JsonProperty("balance")
+    @Column(name = "balance", nullable = false)
     String value;
 
-    @Column(name = "currency")
+    @JsonProperty("currency")
+    @Column(name = "currency", nullable = false)
     Currency currency;
 
     public Balance() {

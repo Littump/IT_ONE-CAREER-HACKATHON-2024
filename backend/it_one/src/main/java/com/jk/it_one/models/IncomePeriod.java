@@ -1,7 +1,7 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.Interfaces.WithBalanceValueAndStartDay;
+import com.jk.it_one.interfaces.WithBalanceValueAndStartDay;
 import com.jk.it_one.enums.IncomeKind;
 import com.jk.it_one.enums.Period;
 import com.jk.it_one.requestDtos.IncomePeriodDto;
@@ -21,29 +21,29 @@ public class IncomePeriod implements WithBalanceValueAndStartDay<IncomePeriod> {
             fetch = FetchType.EAGER,
             cascade = CascadeType.PERSIST
     )
-    @JoinColumn(name = "balance_id")
+    @JoinColumn(name = "balance_id", nullable = false)
     private Balance balance;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "value")
+    @Column(name = "value", nullable = false)
     private String value;
 
-    @Column(name = "kind")
+    @Column(name = "kind", nullable = false)
     private IncomeKind kind;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "start_day")
+    @Column(name = "start_day", nullable = false)
     private Date startDay;
 
-    @Column(name = "period_value")
+    @Column(name = "period_value", nullable = false)
     private int periodValue;
 
-    @Column(name = "period_kind")
+    @Column(name = "period_kind", nullable = false)
     private Period periodKind;
 
     public IncomePeriod() {

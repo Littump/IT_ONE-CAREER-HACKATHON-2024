@@ -4,6 +4,7 @@ import com.jk.it_one.enums.Currency;
 import com.jk.it_one.models.IncomePeriod;
 import com.jk.it_one.requestDtos.IncomePeriodDto;
 import com.jk.it_one.services.IncomePeriodService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class IncomePeriodController {
     }
 
     @PostMapping("/incomes_period")
-    IncomePeriod addIncomePeriod(@RequestBody IncomePeriodDto incomePeriodDto, Principal principal, @RequestParam Currency currency) {
+    IncomePeriod addIncomePeriod(@Valid @RequestBody IncomePeriodDto incomePeriodDto, Principal principal, @RequestParam Currency currency) {
         IncomePeriod incomePeriod = new IncomePeriod(incomePeriodDto);
         return incomePeriodService.save(incomePeriod, principal, currency);
     }

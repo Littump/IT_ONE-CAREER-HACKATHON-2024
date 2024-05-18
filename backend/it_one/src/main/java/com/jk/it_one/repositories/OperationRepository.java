@@ -1,4 +1,4 @@
-package com.jk.it_one.Interfaces;
+package com.jk.it_one.repositories;
 
 import com.jk.it_one.models.Balance;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,5 +8,6 @@ import java.util.List;
 
 @NoRepositoryBean
 public interface OperationRepository<T> extends JpaRepository<T, Long> {
-    List<T> findAllByBalance(Balance balance);
+    List<T> findAllByBalanceOrderByDateDesc(Balance balance);
+    List<T> findTop3ByBalanceOrderByDateDesc(Balance balance);
 }

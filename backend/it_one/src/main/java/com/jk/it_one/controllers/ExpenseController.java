@@ -3,7 +3,9 @@ package com.jk.it_one.controllers;
 import com.jk.it_one.enums.Currency;
 import com.jk.it_one.models.Expense;
 import com.jk.it_one.requestDtos.ExpenseDto;
+import com.jk.it_one.requestDtos.ExpensePatchDto;
 import com.jk.it_one.services.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,7 @@ public class ExpenseController {
     }
 
     @PostMapping("/expenses")
-    Expense addExpense(@RequestBody ExpenseDto expenseDto, Principal principal, @RequestParam Currency currency) {
+    Expense addExpense(@Valid @RequestBody ExpenseDto expenseDto, Principal principal, @RequestParam Currency currency) {
         Expense expense = new Expense(expenseDto);
         return expenseService.save(expense, principal, currency);
     }
@@ -36,7 +38,7 @@ public class ExpenseController {
     }
 
     @PatchMapping("/expenses/{id}")
-    Expense patchExpense(@RequestBody ExpenseDto expenseDto, Principal principal, @PathVariable("id") long id) {
+    Expense patchExpense(@Valid @RequestBody ExpensePatchDto expenseDto, Principal principal, @PathVariable("id") long id) {
         Expense expense = new Expense(expenseDto);
         return expenseService.update(id, expense, principal);
     }

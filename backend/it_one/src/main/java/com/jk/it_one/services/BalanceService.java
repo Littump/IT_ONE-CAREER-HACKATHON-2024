@@ -7,10 +7,12 @@ import com.jk.it_one.repositories.BalanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
 
+@Transactional
 @Service
 public class BalanceService {
     private final UserService userService;
@@ -27,7 +29,12 @@ public class BalanceService {
     }
 
     public Balance findUserBalance(User user, Currency currency) {
-        return balanceRepository.findByUserAndCurrency(user, currency);
+        Balance balance = balanceRepository.findByUserAndCurrency(user, currency);
+        if (balance == null) {
+            balance = new Balance(user, "0", currency);
+            save(balance);
+        }
+        return balance;
     }
 
     public Balance findUserBalance(Principal principal, Currency currency) {

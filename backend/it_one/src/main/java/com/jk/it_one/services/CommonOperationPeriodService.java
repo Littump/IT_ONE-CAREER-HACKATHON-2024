@@ -1,8 +1,8 @@
 package com.jk.it_one.services;
 
-import com.jk.it_one.Interfaces.OperationRepository;
-import com.jk.it_one.Interfaces.WithBalanceAndValue;
-import com.jk.it_one.Interfaces.WithBalanceValueAndStartDay;
+import com.jk.it_one.repositories.OperationPeriodRepository;
+import com.jk.it_one.interfaces.WithBalanceAndValue;
+import com.jk.it_one.interfaces.WithBalanceValueAndStartDay;
 import com.jk.it_one.enums.Currency;
 import com.jk.it_one.exceptions.EntityNotFoundException;
 import com.jk.it_one.models.Balance;
@@ -10,6 +10,7 @@ import com.jk.it_one.models.User;
 import com.jk.it_one.utils.DataTimeUtils;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +22,16 @@ import java.util.function.Function;
 @Transactional
 @Service
 @Setter
-public class OperationPeriodService<V extends WithBalanceAndValue<V>, T extends WithBalanceValueAndStartDay<T>> {
+public class CommonOperationPeriodService<V extends WithBalanceAndValue<V>, T extends WithBalanceValueAndStartDay<T>> {
     private final UserService userService;
     private final BalanceService balanceService;
-    protected OperationRepository<T> operationPeriodRepository;
-    protected OperationService<V> operationService;
+    protected OperationPeriodRepository<T> operationPeriodRepository;
+    protected CommonOperationService<V> operationService;
     protected Function<T, V> operationConstructor;
     protected boolean isExpense;
 
     @Autowired
-    public OperationPeriodService(UserService userService, BalanceService balanceService) {
+    public CommonOperationPeriodService(@Lazy UserService userService, BalanceService balanceService) {
         this.userService = userService;
         this.balanceService = balanceService;
     }
@@ -41,7 +42,7 @@ public class OperationPeriodService<V extends WithBalanceAndValue<V>, T extends 
         Balance balance = balanceService.findUserBalance(user, currency);
         if (DataTimeUtils.isCurrentDay(operationPeriod.getStartDay())) {
             V generatedIncome = operationConstructor.apply(operationPeriod);
-            operationService.save(generatedIncome, balance, user, currency);
+            operationService.save(generatedIncome, balance);
         }
         operationPeriod.setBalance(balance);
         return operationPeriodRepository.save(operationPeriod);
@@ -50,7 +51,7 @@ public class OperationPeriodService<V extends WithBalanceAndValue<V>, T extends 
     public List<T> findAll(Principal principal, Currency currency) {
         User user = userService.findMe(principal);
         Balance balance = balanceService.findUserBalance(user, currency);
-        return operationPeriodRepository.findAllByBalance(balance);
+        return operationPeriodRepository.findAllByBalanceOrderByStartDayDesc(balance);
     }
 
     public T findById(long id, Principal principal) {

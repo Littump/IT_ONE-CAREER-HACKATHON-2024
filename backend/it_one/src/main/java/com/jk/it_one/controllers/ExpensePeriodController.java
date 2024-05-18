@@ -4,6 +4,7 @@ import com.jk.it_one.enums.Currency;
 import com.jk.it_one.models.ExpensePeriod;
 import com.jk.it_one.requestDtos.ExpensePeriodDto;
 import com.jk.it_one.services.ExpensePeriodService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ExpensePeriodController {
     }
 
     @PostMapping("/expenses_period")
-    ExpensePeriod addExpensePeriod(@RequestBody ExpensePeriodDto expensePeriodDto, Principal principal, @RequestParam Currency currency) {
+    ExpensePeriod addExpensePeriod(@Valid @RequestBody ExpensePeriodDto expensePeriodDto, Principal principal, @RequestParam Currency currency) {
         ExpensePeriod expensePeriod = new ExpensePeriod(expensePeriodDto);
         return expensePeriodService.save(expensePeriod, principal, currency);
     }

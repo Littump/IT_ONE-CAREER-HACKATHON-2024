@@ -5,7 +5,9 @@ import com.jk.it_one.models.Goal;
 import com.jk.it_one.models.GoalIncome;
 import com.jk.it_one.requestDtos.GoalDto;
 import com.jk.it_one.requestDtos.GoalIncomeDto;
+import com.jk.it_one.requestDtos.GoalPatchDto;
 import com.jk.it_one.services.GoalService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,7 @@ public class GoalController {
     }
 
     @PostMapping("/goals")
-    Goal addGoal(@RequestBody GoalDto goalDto, Principal principal, @RequestParam Currency currency) {
+    Goal addGoal(@Valid @RequestBody GoalDto goalDto, Principal principal, @RequestParam Currency currency) {
         Goal goal = new Goal(goalDto);
         return goalService.save(goal, principal, currency);
     }
@@ -38,7 +40,7 @@ public class GoalController {
     }
 
     @PatchMapping("/goals/{id}")
-    Goal patchGoal(@RequestBody GoalDto goalDto, Principal principal, @PathVariable("id") long id) {
+    Goal patchGoal(@Valid @RequestBody GoalPatchDto goalDto, Principal principal, @PathVariable("id") long id) {
         Goal goal = new Goal(goalDto);
         return goalService.update(id, goal, principal);
     }
@@ -49,7 +51,7 @@ public class GoalController {
     }
 
     @PostMapping("/goals/{id}/incomes")
-    GoalIncome addGoalIncome(@RequestBody GoalIncomeDto goalIncomeDto, Principal principal, @PathVariable("id") long id) {
+    GoalIncome addGoalIncome(@Valid @RequestBody GoalIncomeDto goalIncomeDto, Principal principal, @PathVariable("id") long id) {
         GoalIncome goal = new GoalIncome(goalIncomeDto);
         return goalService.saveGoalIncome(goal, principal, id);
     }
@@ -65,7 +67,7 @@ public class GoalController {
     }
 
     @PatchMapping("/goals/{goalId}/incomes/{goalIncomeId}")
-    GoalIncome patchGoalIncome(@RequestBody GoalIncomeDto goalIncomeDto, Principal principal, @PathVariable("goalId") long goalId, @PathVariable("goalIncomeId") long goalIncomeId) {
+    GoalIncome patchGoalIncome(@Valid @RequestBody GoalIncomeDto goalIncomeDto, Principal principal, @PathVariable("goalId") long goalId, @PathVariable("goalIncomeId") long goalIncomeId) {
         return goalService.updateGoalIncome(goalId, goalIncomeId, goalIncomeDto, principal);
     }
 
