@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
+@RequestMapping("/api")
 @RestController
 public class OperationsController {
     private final OperationsService operationService;
