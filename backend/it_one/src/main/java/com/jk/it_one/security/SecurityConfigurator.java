@@ -25,6 +25,21 @@ import org.springframework.security.authentication.AuthenticationProvider;
 public class SecurityConfigurator {
     private UserService userService;
     private TokenFilter tokenFilter;
+    private static final String[] AUTH_WHITELIST = {
+
+            // for Swagger UI v2
+            "/v2/api-docs",
+            "/swagger-ui.html",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/webjars/**",
+
+            // for Swagger UI v3 (OpenAPI)
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
 
     public SecurityConfigurator() {}
 
@@ -63,7 +78,8 @@ public class SecurityConfigurator {
 //                .exceptionHandling(exceptions -> exceptions
 //                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/", "/api/auth/token/login/").permitAll()
+                        .requestMatchers("/api/users", "/api/auth/token/login").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
