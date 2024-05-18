@@ -90,7 +90,10 @@ jobs:
   send_message_telegram:
     name: message in tg
     runs-on: ubuntu-latest
-    needs: deploy
+    needs:
+      - deploy
+      - deploy-2
+      - deploy-3
     steps:
       - name: sms
         uses: appleboy/telegram-action@master
