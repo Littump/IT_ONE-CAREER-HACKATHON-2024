@@ -63,7 +63,7 @@ public class SecurityConfigurator {
 //                .exceptionHandling(exceptions -> exceptions
 //                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/users", "/auth/token/login").permitAll()
+                        .requestMatchers("/api/users", "/api/auth/token/login").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
