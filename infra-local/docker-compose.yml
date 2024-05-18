@@ -14,7 +14,6 @@ services:
       - '5432:5432'
   backend:
     build: ../backend/it_one/
-    restart: always
     depends_on:
       - postgres
   nginx:
@@ -25,9 +24,9 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/dist:/usr/share/nginx/html/
-    depends_on:
-      - frontend
-  frontend:
-    build: ../frontend/
-    volumes:
-      - ../frontend/:/app/result_build/
+    # depends_on:
+    #   - frontend
+  # frontend:
+  #   build: ../frontend/
+  #   volumes:
+  #     - ../frontend/:/app/result_build/
