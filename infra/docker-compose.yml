@@ -4,12 +4,14 @@ services:
   backend:
     image: littump/backend_project:latest
     restart: always
+    env_file: ./backend/.env
+    volumes: 
+      - ~/.postgresql/root.crt:/root/.postgresql/root.crt
   frontend:
     restart: no
     image: littump/frontend_project:latest
     volumes:
       - ../frontend/:/app/result_build/
-    env_file: ../frontend/.env
     depends_on:
       - backend
   nginx:
