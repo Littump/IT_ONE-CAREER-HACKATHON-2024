@@ -10,8 +10,8 @@ import com.jk.it_one.models.IncomePeriod;
 
 import java.util.Date;
 
-class TestsUtils {
-    static Income baseIncome() {
+public class TestsUtils {
+    public static Income baseIncome() {
         Income income = new Income();
         income.setId(1L);
         income.setValue("239");
@@ -20,7 +20,7 @@ class TestsUtils {
         return income;
     }
 
-    static Expense baseExpense() {
+    public static Expense baseExpense() {
         Expense expense = new Expense();
         expense.setId(1L);
         expense.setValue("239");
@@ -29,7 +29,7 @@ class TestsUtils {
         return expense;
     }
 
-    static IncomePeriod baseIncomePeriod() {
+    public static IncomePeriod baseIncomePeriod() {
         IncomePeriod incomePeriod = new IncomePeriod();
         incomePeriod.setId(1L);
         incomePeriod.setValue("239");
@@ -40,7 +40,7 @@ class TestsUtils {
         return incomePeriod;
     }
 
-    static ExpensePeriod baseExpensePeriod() {
+    public static ExpensePeriod baseExpensePeriod() {
         ExpensePeriod expensePeriod = new ExpensePeriod();
         expensePeriod.setId(1L);
         expensePeriod.setValue("239");
