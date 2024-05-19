@@ -7,6 +7,7 @@ import { CurrencyType } from "@/types/currency.ts";
 import { Form, Formik } from "formik";
 import { usePatchMe } from "@/modules/Profile/api/usePatchMe.ts";
 import { useGetMe } from "@/modules/Profile/api/useGetMe.ts";
+import { queryClient } from "@/main.tsx";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required("required field").min(3, "invalid value"),
@@ -41,6 +42,8 @@ const Profile = () => {
         initialValues={initialValues}
         onSubmit={({ name, username, currency }) => {
           localStorage.setItem("currency", currency);
+          queryClient.invalidateQueries({ queryKey: ["goals"] });
+          queryClient.invalidateQueries({ queryKey: ["operations"] });
           mutate({ name, username });
         }}
         validationSchema={validationSchema}

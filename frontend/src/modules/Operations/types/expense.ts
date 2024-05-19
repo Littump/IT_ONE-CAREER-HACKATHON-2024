@@ -1,15 +1,15 @@
 export enum EXPENSE_EMOJIS {
-  food = "🥪",
-  house = "🏡",
-  personal = "☕",
-  transport = "🚌",
-  healthcare = "💊",
-  education = "🎓",
-  entertainment = "🎠",
+  FOOD = "🥪",
+  HOUSE = "🏡",
+  PERSONAL = "☕",
+  TRANSPORT = "🚌",
+  HEALTH = "💊",
+  EDUCATION = "🎓",
+  ENTERTAINMENTS = "🎠",
 }
 export type ExpenseType = keyof typeof EXPENSE_EMOJIS;
 
-export type PeriodKindType = "day" | "week" | "month" | "year";
+export type PeriodKindType = "DAY" | "WEEK" | "MONTH" | "YEAR";
 
 export interface IExpense {
   description: string;

@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/main.tsx";
-import profileService from "@/modules/Profile/api/profileService.ts";
-import { PatchDto } from "@/modules/Profile/types/patch.dto.ts";
+import { AddDto } from "@/modules/Goals/types/add.dto.ts";
+import goalService from "@/modules/Goals/api/goalService.ts";
+import { CurrencyType } from "@/types/currency.ts";
 
-export const usePatchGoal = () =>
+export const useAddGoal = (currency: CurrencyType) =>
   useMutation({
-    mutationFn: (body: PatchDto) => profileService.patchMe(body),
+    mutationFn: (body: AddDto) => goalService.addGoal(body, currency),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["me"] });
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
     },
   });

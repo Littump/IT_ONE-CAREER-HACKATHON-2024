@@ -3,7 +3,7 @@ import { Typography } from "@material-tailwind/react";
 import useGetCurrency from "@/helpers/useGetCurrency.ts";
 import { NavLink } from "react-router-dom";
 
-const GoalItemMin = ({ type, description, value, id }: IGoal) => {
+const GoalItemMin = ({ kind, description, value, id }: IGoal) => {
   const currency = useGetCurrency();
   return (
     <NavLink
@@ -12,11 +12,11 @@ const GoalItemMin = ({ type, description, value, id }: IGoal) => {
     >
       <div className="w-9/12 flex gap-4 justify-start items-center">
         <span className="text-4xl w-14 h-14 border-2 border-gray-200 rounded-full flex justify-center items-center">
-          {GOAL_EMOJIS[type]}
+          {GOAL_EMOJIS[kind]}
         </span>
         <div>
           <Typography variant="h5" className="font-semibold">
-            {type}
+            {kind}
           </Typography>
           <Typography variant="paragraph" className="text-gray-500">
             {description}

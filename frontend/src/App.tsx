@@ -9,7 +9,6 @@ import EditGoalFormPage from "@/pages/goals/EditGoalFormPage.tsx";
 import GoalsInfoPage from "@/pages/goals/GoalsInfoPage.tsx";
 import OperationsInfoPage from "@/pages/operations/OperationsInfoPage.tsx";
 import OperationPage from "@/pages/operations/OperationPage.tsx";
-import EditOperationFormPage from "@/pages/operations/EditOperationFormPage.tsx";
 import AddOperationChooseTypePage from "@/pages/operations/AddOperationChooseTypePage.tsx";
 import AddOperationChooseKindPage from "@/pages/operations/AddOperationChooseKindPage.tsx";
 import AddOperationFormPage from "@/pages/operations/AddOperationFormPage.tsx";
@@ -72,18 +71,10 @@ const operationsRouter = [
     ),
   },
   {
-    path: "/operations/:id",
+    path: "/operations/:periodic/:kind/:id",
     element: (
       <Layout>
         <OperationPage />
-      </Layout>
-    ),
-  },
-  {
-    path: "/operations/:id/editOperation",
-    element: (
-      <Layout>
-        <EditOperationFormPage />
       </Layout>
     ),
   },
