@@ -53,7 +53,7 @@ const TransferC = ({ date, value, id, goalId }: TransferProps) => {
         <Typography variant="paragraph" className="text-lg">
           {t("replenishment")}
         </Typography>
-        <Typography variant="paragraph">{date}</Typography>
+        <Typography variant="paragraph">{date.slice(0, 10)}</Typography>
       </div>
       <div className="w-24 md:w-2/12 flex justify-end">
         <Typography variant="paragraph" className="font-semibold">
