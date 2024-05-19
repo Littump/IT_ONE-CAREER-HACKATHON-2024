@@ -10,7 +10,7 @@ public class MoneyCalculator {
         throw new IllegalStateException("Utility class");
     }
 
-    private static Map<Currency, Map<Currency, String>> convertor = Map.of(
+    private static final Map<Currency, Map<Currency, String>> convertor = Map.of(
             Currency.RUB, Map.of(
                     Currency.RUB, "1",
                     Currency.USD, "0.010991",

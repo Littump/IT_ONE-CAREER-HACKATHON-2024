@@ -23,29 +23,29 @@ public class ExpenseController {
     }
 
     @PostMapping
-    Expense addExpense(@Valid @RequestBody ExpenseDto expenseDto, Principal principal, @RequestParam Currency currency) {
+    public Expense addExpense(@Valid @RequestBody ExpenseDto expenseDto, Principal principal, @RequestParam Currency currency) {
         Expense expense = new Expense(expenseDto);
         return expenseService.save(expense, principal, currency);
     }
 
     @GetMapping
-    List<Expense> getExpenses(Principal principal, @RequestParam Currency currency) {
+    public List<Expense> getExpenses(Principal principal, @RequestParam Currency currency) {
         return expenseService.findAll(principal, currency);
     }
 
     @GetMapping("/{id}")
-    Expense getExpense(Principal principal, @PathVariable("id") long id) {
+    public Expense getExpense(Principal principal, @PathVariable("id") long id) {
         return expenseService.findById(id, principal);
     }
 
     @PatchMapping("/{id}")
-    Expense patchExpense(@Valid @RequestBody ExpensePatchDto expenseDto, Principal principal, @PathVariable("id") long id) {
+    public Expense patchExpense(@Valid @RequestBody ExpensePatchDto expenseDto, Principal principal, @PathVariable("id") long id) {
         Expense expense = new Expense(expenseDto);
         return expenseService.update(id, expense, principal);
     }
 
     @DeleteMapping("/{id}")
-    String deleteExpense(Principal principal, @PathVariable("id") long id) {
+    public String deleteExpense(Principal principal, @PathVariable("id") long id) {
         return expenseService.delete(id, principal);
     }
 }
