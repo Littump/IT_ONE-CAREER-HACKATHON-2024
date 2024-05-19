@@ -1,3 +1,11 @@
+### Демонстрация работы:
+https://drive.google.com/file/d/1dLkKpOLkBhO6LkXJ8nhUFHZ4IEyqCBNt/view?usp=sharing
+
+### Презентация:
+https://drive.google.com/drive/folders/1d-4J0odyogJy3N6_UECy37EqAmm7VsVt?usp=sharing
+
+---
+
 ## Как поднять проект
 
 1. **Собрать образы локально**
