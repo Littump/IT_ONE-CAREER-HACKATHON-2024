@@ -3,6 +3,8 @@ version: "3.3"
 services:
   backend:
     build: ../backend/it_one/
+    volumes:
+      - ~/.postgresql:~/.postgresql
   nginx:
     image: nginx:1.19.3
     restart: always
