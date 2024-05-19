@@ -7,6 +7,9 @@ import { Form, Formik } from "formik";
 import DateInput from "@/ui/DateInput.tsx";
 import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 import * as yup from "yup";
+import { useAddGoal } from "@/modules/Goals/api/useAddGoal.ts";
+import useGetCurrency from "@/helpers/useGetCurrency.ts";
+import { useEffect } from "react";
 
 const validationsSchema = yup.object().shape({
   value: yup.string().required("required field").min(1, "invalid value"),
@@ -22,13 +25,14 @@ const validationsSchema = yup.object().shape({
 
 const AddGoalForm = () => {
   const { type } = useParams<{ type: GoalType }>();
-
+  const currency = useGetCurrency();
+  const { mutate, isPending, isSuccess } = useAddGoal(currency);
   const navigate = useNavigate();
   const { t } = useTypedTranslation();
 
-  const handleSubmit = () => {
-    navigate("/");
-  };
+  useEffect(() => {
+    if (!isPending && isSuccess) navigate("/");
+  }, [isPending, isSuccess]);
 
   const initialValues = {
     value: 0,
@@ -38,6 +42,7 @@ const AddGoalForm = () => {
       endDate: new Date(),
     },
   };
+  if (!type) return;
   return (
     <div className="flex flex-col gap-6 md:max-w-xl mx-auto">
       <div className="grid grid-cols-3 w-full text-center">
@@ -50,7 +55,14 @@ const AddGoalForm = () => {
       </div>
       <Formik
         validationSchema={validationsSchema}
-        onSubmit={handleSubmit}
+        onSubmit={({ description, date, value }) =>
+          mutate({
+            description,
+            goal_value: value,
+            kind: type,
+            deadline: date.startDate.toString(),
+          })
+        }
         initialValues={initialValues}
       >
         {({ values, setFieldValue, handleChange, touched, errors }) => {
@@ -82,7 +94,13 @@ const AddGoalForm = () => {
                 success={!!(touched.description && !errors.description)}
                 label={t("description")}
               />
-              <Button type="submit">{t("add")}</Button>
+              <Button
+                type="submit"
+                className="flex justify-center"
+                loading={isPending}
+              >
+                {t("add")}
+              </Button>
             </Form>
           );
         }}

@@ -13,21 +13,20 @@ const AddOperationChooseType = () => {
   }>();
   const { t } = useTypedTranslation();
   const incomes: IncomeType[] = [
-    "salary",
-    "business",
-    "gifts",
-    "investment",
-    "partTime",
-    "passive",
+    "SALARY",
+    "GIFTS",
+    "INVESTMENT",
+    "PASSIVE",
+    "PART-TIME-JOB",
   ];
   const expenses: ExpenseType[] = [
-    "food",
-    "transport",
-    "entertainment",
-    "healthcare",
-    "personal",
-    "house",
-    "education",
+    "FOOD",
+    "TRANSPORT",
+    "ENTERTAINMENTS",
+    "HEALTH",
+    "PERSONAL",
+    "HOUSE",
+    "EDUCATION",
   ];
   const list = kind === "expenses" ? expenses : incomes;
   return (

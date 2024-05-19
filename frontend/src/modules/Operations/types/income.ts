@@ -1,12 +1,12 @@
 import { PeriodKindType } from "@/modules/Operations/types/expense.ts";
 
 export enum INCOME_EMOJIS {
-  salary = "🏢",
-  partTime = "💼",
-  business = "👨‍💼",
-  passive = "🏝️",
-  gifts = "🎁",
-  investment = "💹",
+  SALARY = "🏢",
+  "PART-TIME-JOB" = "💼",
+  PROFIT = "👨‍💼",
+  PASSIVE = "🏝️",
+  GIFTS = "🎁",
+  INVESTMENT = "💹",
 }
 export type IncomeType = keyof typeof INCOME_EMOJIS;
 

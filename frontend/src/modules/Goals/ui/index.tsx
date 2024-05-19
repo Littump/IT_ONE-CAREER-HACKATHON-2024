@@ -1,10 +1,12 @@
-import { Button, Typography } from "@material-tailwind/react";
+import { Button, Spinner, Typography } from "@material-tailwind/react";
 import { NavLink } from "react-router-dom";
 import { IGoal } from "@/modules/Goals/types/goal.ts";
 import GoalItemMin from "@/modules/Goals/ui/GoalItemMin.tsx";
 import AddGoalItem from "@/modules/Goals/ui/AddGoalItem.tsx";
 import { useState } from "react";
 import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
+import { useGetGoals } from "@/modules/Goals/api/useGetGoals.ts";
+import useGetCurrency from "@/helpers/useGetCurrency.ts";
 
 interface Props {
   isFull?: boolean;
@@ -12,9 +14,11 @@ interface Props {
 
 const Goals = ({ isFull = true }: Props) => {
   const [showAll, setShowAll] = useState(!isFull);
-
+  const currency = useGetCurrency();
+  const { data, isPending } = useGetGoals(currency);
   const { t } = useTypedTranslation();
-  const goals: IGoal[] = [];
+  if (!data) return <Spinner />;
+  const goals: IGoal[] = data.data;
   return (
     <div className="rounded-2xl py-6 px-4 border border-gray-300">
       {isFull ? (
@@ -59,9 +63,13 @@ const Goals = ({ isFull = true }: Props) => {
         <Typography variant="h5">{t("your-goals")}</Typography>
       )}
       <div className="my-4 flex flex-col ">
-        {goals.slice(0, showAll ? goals.length : 2).map((el) => (
-          <GoalItemMin key={el.description} {...el} />
-        ))}
+        {isPending ? (
+          <Spinner />
+        ) : (
+          goals
+            .slice(0, showAll ? goals.length : 2)
+            .map((el, id) => <GoalItemMin key={el.description + id} {...el} />)
+        )}
       </div>
       <AddGoalItem />
     </div>

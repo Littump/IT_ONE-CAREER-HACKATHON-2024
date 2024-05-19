@@ -1,21 +1,34 @@
 import useGetCurrency from "@/helpers/useGetCurrency.ts";
-import { GOAL_EMOJIS, IGoal, Transfer } from "@/modules/Goals/types/goal.ts";
+import { GOAL_EMOJIS, Transfer } from "@/modules/Goals/types/goal.ts";
 import BackLink from "@/ui/BackLink.tsx";
 import {
   Button,
   IconButton,
   Input,
+  Spinner,
   Typography,
 } from "@material-tailwind/react";
 import Emoji from "@/ui/Emoji.tsx";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 import { Form, Formik } from "formik";
+import { useGetGoal } from "@/modules/Goals/api/useGetGoal.ts";
+import { useAddIncomeToGoal } from "@/modules/Goals/api/useAddIncomeToGoal.ts";
+import { useDeleteGoal } from "@/modules/Goals/api/useDeleteGoal.ts";
+import { useGetIncomes } from "@/modules/Goals/api/useGetIncomes.ts";
+import { useDeleteIncome } from "@/modules/Goals/api/useDeleteIncome.ts";
+interface TransferProps {
+  date: string;
+  value: number;
+  id: number;
+  goalId: number;
+}
 
-const TransferC = ({ date, value }: Transfer) => {
+const TransferC = ({ date, value, id, goalId }: TransferProps) => {
   const { t } = useTypedTranslation();
   const currency = useGetCurrency();
+  const { mutate } = useDeleteIncome(goalId, id);
   return (
     <div className="flex gap-4 items-center  w-full border-b border-gray-200 pb-4">
       <div className="w-20 md:w-1/12">
@@ -48,7 +61,11 @@ const TransferC = ({ date, value }: Transfer) => {
           +{value} {currency}
         </Typography>
       </div>
-      <button type="button" className="w-10 hover:text-red-500 transition">
+      <button
+        type="button"
+        onClick={() => mutate()}
+        className="w-10 hover:text-red-500 transition"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -70,33 +87,39 @@ const TransferC = ({ date, value }: Transfer) => {
 
 const GoalItemBig = () => {
   const currency = useGetCurrency();
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const [showAllTransfers, setShowAllTransfers] = useState(false);
   const [isAddMoney, setIsAddMoney] = useState(false);
-  const goal: IGoal = {
-    kind: "goal",
-    description: "Книга",
-    value: 2000,
-    goal_value: 2000,
-    achieved: true,
-    deadline: "22-01-2023",
-    id: 4,
-  };
-  const transfers: Transfer[] = [
-    { date: "22-01-2024", value: 500, id: 1 },
-    { date: "22-01-2024", value: 220, id: 2 },
-    { date: "22-01-2024", value: 300, id: 3 },
-    { date: "22-01-2024", value: 100, id: 4 },
-    { date: "22-01-2024", value: 500, id: 5 },
-    { date: "22-01-2024", value: 600, id: 6 },
-  ];
-
-  const handleAddMoney = (value: number) => {
-    setIsAddMoney(false);
-    console.log(value);
-  };
-
   const { t } = useTypedTranslation();
-  const { kind, description, value, goal_value, achieved, deadline } = goal;
+
+  const { data, isPending } = useGetGoal(currency, id ? +id : 1);
+
+  const {
+    mutate: addIncome,
+    isPending: incomePending,
+    isSuccess: incomeSuccess,
+  } = useAddIncomeToGoal(id ? +id : 1, currency);
+  const { data: transferData, isPending: transferPending } = useGetIncomes(
+    id ? +id : 0,
+  );
+  const deleteGoal = useDeleteGoal(id ? +id : 1);
+
+  useEffect(() => {
+    if (deleteGoal.isSuccess && !deleteGoal.isPending) navigate("/");
+  }, [deleteGoal]);
+
+  useEffect(() => {
+    if (incomeSuccess && !incomePending) setIsAddMoney(false);
+  }, [incomeSuccess, incomePending]);
+
+  if (!data || isPending) return <Spinner />;
+
+  const goal = data.data;
+  const { kind, description, value, goalValue, achieved, deadline } = goal;
+
+  if (!transferData || transferPending) return <Spinner />;
+  const transfers: Transfer[] = transferData.data;
   return (
     <div className="flex flex-col gap-8">
       <div className="grid grid-cols-3 w-full text-center">
@@ -124,7 +147,10 @@ const GoalItemBig = () => {
               />
             </svg>
           </NavLink>
-          <button className="hover:text-red-500 transition">
+          <button
+            onClick={() => deleteGoal.mutate()}
+            className="hover:text-red-500 transition"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -179,7 +205,7 @@ const GoalItemBig = () => {
         </Typography>
       </div>
       <Formik
-        onSubmit={(values) => handleAddMoney(values.value)}
+        onSubmit={(values) => addIncome(values.value)}
         initialValues={{ value: 0 }}
       >
         {({ values, handleChange, touched, errors }) => {
@@ -203,22 +229,26 @@ const GoalItemBig = () => {
                     label={t("goal-sum")}
                   />
 
-                  <IconButton type="submit">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
-                      />
-                    </svg>
-                  </IconButton>
+                  {incomePending ? (
+                    <Spinner />
+                  ) : (
+                    <IconButton type="submit">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
+                        />
+                      </svg>
+                    </IconButton>
+                  )}
                 </div>
               )}
             </Form>
@@ -229,13 +259,13 @@ const GoalItemBig = () => {
         <div className="flex justify-between border-b items-center border-blue-gray-200 pb-4">
           <Typography variant="paragraph">{t("goal-solo")}</Typography>{" "}
           <Typography variant="h6" className="text-black">
-            {goal_value} {currency}
+            {goalValue} {currency}
           </Typography>
         </div>
         <div className="flex justify-between items-center">
           <Typography variant="paragraph">{t("end-date")}</Typography>{" "}
           <Typography variant="h6" className="text-black">
-            {deadline.replace(/-/g, ".")}
+            {deadline.replace(/-/g, ".").slice(0, 10)}
           </Typography>
         </div>
       </div>
@@ -245,7 +275,7 @@ const GoalItemBig = () => {
           {transfers
             .slice(0, showAllTransfers ? transfers.length : 2)
             .map((el) => (
-              <TransferC key={el.id} {...el} />
+              <TransferC goalId={id ? +id : 1} key={el.id} {...el} />
             ))}
           <button
             className="text-blue-gray-700 underline"

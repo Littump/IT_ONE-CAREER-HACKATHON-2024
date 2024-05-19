@@ -3,17 +3,21 @@ import API_URL from "@/config/api.ts";
 import { CurrencyType } from "@/types/currency.ts";
 import { AddDto } from "@/modules/Goals/types/add.dto.ts";
 import { PatchDto } from "@/modules/Goals/types/patch.dto.ts";
+import { IGoal, Transfer } from "@/modules/Goals/types/goal.ts";
 
 class goalService {
   async getGoals(currency: CurrencyType) {
-    return axios.get(`${API_URL}goals?currency=${currency.toUpperCase()}`, {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
+    return axios.get<IGoal[]>(
+      `${API_URL}goals?currency=${currency.toUpperCase()}`,
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
       },
-    });
+    );
   }
   async getGoal(id: number, currency: CurrencyType) {
-    return axios.get(
+    return axios.get<IGoal>(
       `${API_URL}goals/${id}?currency=${currency.toUpperCase()}`,
       {
         headers: {
@@ -22,16 +26,7 @@ class goalService {
       },
     );
   }
-  async getIncomes(id: number, currency: CurrencyType) {
-    return axios.get(
-      `${API_URL}goals/${id}/incomes?currency=${currency.toUpperCase()}`,
-      {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      },
-    );
-  }
+
   async patchGoal(body: PatchDto, id: number, currency: CurrencyType) {
     return axios.patch(
       `${API_URL}goals/${id}?currency=${currency.toUpperCase()}`,
@@ -46,7 +41,7 @@ class goalService {
   async addGoal(body: AddDto, currency: CurrencyType) {
     return axios.post(
       `${API_URL}goals?currency=${currency.toUpperCase()}`,
-      body,
+      { ...body, kind: body.kind.toUpperCase() },
       {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -54,10 +49,10 @@ class goalService {
       },
     );
   }
-  async addIncomeToGoal(body: AddDto, id: number, currency: CurrencyType) {
+  async addIncomeToGoal(value: number, id: number, currency: CurrencyType) {
     return axios.post(
       `${API_URL}goals/${id}/incomes?currency=${currency.toUpperCase()}`,
-      body,
+      { value },
       {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -65,8 +60,15 @@ class goalService {
       },
     );
   }
-  async deleteIncomeToGoal(id: number) {
-    return axios.delete(`${API_URL}goals/${id}/incomes`, {
+  async deleteIncomeToGoal(id: number, goalId: number) {
+    return axios.delete(`${API_URL}goals/${id}/incomes/${goalId}`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+  }
+  async getIncomesToGoal(id: number) {
+    return axios.get<Transfer[]>(`${API_URL}goals/${id}/incomes`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },

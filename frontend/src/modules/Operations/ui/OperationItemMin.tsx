@@ -4,7 +4,10 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { EXPENSE_EMOJIS } from "@/modules/Operations/types/expense.ts";
 import { INCOME_EMOJIS } from "@/modules/Operations/types/income.ts";
-import { OperationProps } from "@/modules/Operations/types/operation.ts";
+import {
+  KindOperation,
+  OperationProps,
+} from "@/modules/Operations/types/operation.ts";
 
 const OperationItemMin = ({
   kind_operation,
@@ -15,18 +18,22 @@ const OperationItemMin = ({
   period_kind,
   period_value,
 }: OperationProps) => {
+  const kindLower = kind_operation.toLowerCase() as KindOperation;
+  const periodic = period_value ? "periodic" : "oneTime";
+  const kindLink = kindLower === "expense" ? "expense" : "income";
   const { t } = useTranslation();
   const currency = useGetCurrency();
   return (
     <NavLink
-      to={`/operations/${id}`}
+      to={`/operations/${periodic}/${kindLink}/${id}`}
       className="flex transition hover:bg-gray-200 py-4 px-2 items-center justify-between border-b border-gray-300"
     >
       <div className="w-9/12 flex gap-4 justify-start items-center">
         <span className="text-4xl w-14 h-14 border-2 border-gray-200 rounded-full flex justify-center items-center">
-          {kind_operation === "expense"
-            ? EXPENSE_EMOJIS[kind]
-            : INCOME_EMOJIS[kind]}
+          {
+            // @ts-ignore
+            kindLower === "expense" ? EXPENSE_EMOJIS[kind] : INCOME_EMOJIS[kind]
+          }
         </span>
         <div>
           <Typography variant="h6" className="font-semibold">
@@ -48,7 +55,7 @@ const OperationItemMin = ({
         variant="h6"
         className="font-semibold ml-auto text-end w-3/12"
       >
-        {(kind_operation === "income" ? "+" : "-") + value + " " + currency}
+        {(kindLower === "income" ? "+" : "-") + value + " " + currency}
       </Typography>
     </NavLink>
   );

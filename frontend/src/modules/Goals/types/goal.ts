@@ -1,10 +1,10 @@
 export enum GOAL_EMOJIS {
-  travel = "✈️",
-  cushion = "🏝️",
-  emergency = "🏠",
-  gift = "🎁",
-  egg = "💰",
-  goal = "🤔",
+  TRAVEL = "✈️",
+  CUSHION = "🏝️",
+  EMERGENCY = "🏠",
+  GIFT = "🎁",
+  EGG = "💰",
+  GOAL = "🤔",
 }
 export type GoalType = keyof typeof GOAL_EMOJIS;
 
@@ -13,7 +13,7 @@ export interface IGoal {
   id: number;
   kind: GoalType;
   value: number;
-  goal_value: number;
+  goalValue: number;
   deadline: string;
   achieved: boolean;
 }

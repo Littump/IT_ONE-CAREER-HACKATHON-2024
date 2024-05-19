@@ -1,10 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
 import BackLink from "@/ui/BackLink.tsx";
-import { Button, Input, Typography } from "@material-tailwind/react";
+import { Button, Input, Spinner, Typography } from "@material-tailwind/react";
 import { Form, Formik } from "formik";
 import DateInput from "@/ui/DateInput.tsx";
 import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 import * as yup from "yup";
+import { useGetGoal } from "@/modules/Goals/api/useGetGoal.ts";
+import useGetCurrency from "@/helpers/useGetCurrency.ts";
+import { usePatchGoal } from "@/modules/Goals/api/usePatchGoal.ts";
+import { useEffect } from "react";
 
 const validationsSchema = yup.object().shape({
   value: yup.string().required("required field").min(1, "invalid value"),
@@ -20,18 +24,24 @@ const validationsSchema = yup.object().shape({
 
 const EditGoalForm = () => {
   const navigate = useNavigate();
+  const currency = useGetCurrency();
   const { id } = useParams<{ id: string }>();
-
-  const handleSubmit = () => {
-    navigate("/goals/" + id);
-  };
+  const { data, isPending } = useGetGoal(currency, id ? +id : 1);
+  const patchGoal = usePatchGoal(id ? +id : 1, currency);
   const { t } = useTypedTranslation();
+
+  useEffect(() => {
+    if (!patchGoal.isPending && patchGoal.isSuccess) navigate("goals/" + id);
+  }, [patchGoal]);
+
+  if (!data || isPending) return <Spinner />;
+
   const initialValues = {
-    value: 0,
-    description: "",
+    value: data.data.goalValue,
+    description: data.data.description,
     date: {
-      startDate: null,
-      endDate: null,
+      startDate: new Date(data.data.deadline),
+      endDate: new Date(data.data.deadline),
     },
   };
   return (
@@ -43,7 +53,14 @@ const EditGoalForm = () => {
         </Typography>
       </div>
       <Formik
-        onSubmit={() => {}}
+        onSubmit={({ value, description, date }) => {
+          patchGoal.mutate({
+            goal_value: value,
+            description,
+            deadline: date.startDate.toString(),
+            kind: data.data.kind,
+          });
+        }}
         initialValues={initialValues}
         validationSchema={validationsSchema}
       >
@@ -76,7 +93,9 @@ const EditGoalForm = () => {
                 success={!!(touched.description && !errors.description)}
                 label={t("description")}
               />
-              <Button type="submit">{t("add")}</Button>
+              <Button type="submit" loading={patchGoal.isPending}>
+                {t("add")}
+              </Button>
             </Form>
           );
         }}
