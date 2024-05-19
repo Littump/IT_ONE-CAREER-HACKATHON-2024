@@ -22,23 +22,23 @@ public class ExpensePeriodController {
     }
 
     @PostMapping
-    ExpensePeriod addExpensePeriod(@Valid @RequestBody ExpensePeriodDto expensePeriodDto, Principal principal, @RequestParam Currency currency) {
+    public ExpensePeriod addExpensePeriod(@Valid @RequestBody ExpensePeriodDto expensePeriodDto, Principal principal, @RequestParam Currency currency) {
         ExpensePeriod expensePeriod = new ExpensePeriod(expensePeriodDto);
         return expensePeriodService.save(expensePeriod, principal, currency);
     }
 
     @GetMapping
-    List<ExpensePeriod> getExpensesPeriod(Principal principal, @RequestParam Currency currency) {
+    public List<ExpensePeriod> getExpensesPeriod(Principal principal, @RequestParam Currency currency) {
         return expensePeriodService.findAll(principal, currency);
     }
 
     @GetMapping("/{id}")
-    ExpensePeriod getExpensePeriod(Principal principal, @PathVariable("id") long id) {
+    public ExpensePeriod getExpensePeriod(Principal principal, @PathVariable("id") long id) {
         return expensePeriodService.findById(id, principal);
     }
 
     @DeleteMapping("/{id}")
-    String deleteExpensePeriod(Principal principal, @PathVariable("id") long id) {
+    public String deleteExpensePeriod(Principal principal, @PathVariable("id") long id) {
         return expensePeriodService.delete(id, principal);
     }
 }

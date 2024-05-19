@@ -21,12 +21,12 @@ public class OperationsController {
     }
 
     @GetMapping("/operations")
-    List<OperationDto> getOperations(Principal principal, @RequestParam Currency currency) {
+    public List<OperationDto> getOperations(Principal principal, @RequestParam Currency currency) {
         return operationService.findOperations(principal, currency);
     }
 
     @GetMapping("/operations_period")
-    List<OperationPeriodDto> getOperationsPeriod(Principal principal, @RequestParam Currency currency) {
+    public List<OperationPeriodDto> getOperationsPeriod(Principal principal, @RequestParam Currency currency) {
         return operationService.findOperationPeriods(principal, currency);
     }
 }
