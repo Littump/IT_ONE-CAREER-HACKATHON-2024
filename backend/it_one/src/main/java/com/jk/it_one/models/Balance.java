@@ -21,7 +21,7 @@ public class Balance {
             cascade = CascadeType.PERSIST
     )
     @JoinColumn(name = "user_id", nullable = false)
-    User user;
+    private User user;
 
     @JsonProperty("id")
     @Id
@@ -30,11 +30,11 @@ public class Balance {
 
     @JsonProperty("balance")
     @Column(name = "balance", nullable = false)
-    String value;
+    private String value;
 
     @JsonProperty("currency")
     @Column(name = "currency", nullable = false)
-    Currency currency;
+    private Currency currency;
 
     public Balance(User user, String value, Currency currency) {
         this.user = user;

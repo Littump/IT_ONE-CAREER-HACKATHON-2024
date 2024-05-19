@@ -1,20 +1,27 @@
 package com.jk.it_one.utils;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Calendar;
 import java.util.Date;
 
-
 class DataTimeUtilsTest {
-    @Test
-    void testIsCurrentDay() {
-        Date date = new Date();
-        assertTrue(DataTimeUtils.isCurrentDay(date));
 
-        int not_current_day = 1715948197;
-        date = new Date(not_current_day);
-        assertFalse(DataTimeUtils.isCurrentDay(date));
+    @Test
+    void testIsCurrentDay_CurrentDay() {
+        Date currentDate = new Date();
+        boolean result = DataTimeUtils.isCurrentDay(currentDate);
+        assertTrue(result);
+    }
+
+    @Test
+    void testIsCurrentDay_NotCurrentDay() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        Date previousDay = calendar.getTime();
+        boolean result = DataTimeUtils.isCurrentDay(previousDay);
+        assertFalse(result);
     }
 }
