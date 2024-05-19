@@ -48,7 +48,7 @@ const OperationItemMin = ({
         variant="h6"
         className="font-semibold ml-auto text-end w-3/12"
       >
-        {(kind_operation === "income" ? "+" : "-") + value + currency}
+        {(kind_operation === "income" ? "+" : "-") + value + " " + currency}
       </Typography>
     </NavLink>
   );

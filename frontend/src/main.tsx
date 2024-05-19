@@ -5,6 +5,7 @@ import "./index.css";
 import toast, { Toaster } from "react-hot-toast";
 import {
   QueryCache,
+  MutationCache,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
@@ -18,6 +19,11 @@ export const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: (error) => toast.error(`Something went wrong: ${error.message}`),
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => {
+      toast.error(`Something went wrong: ${error.message}`);
+    },
   }),
 });
 

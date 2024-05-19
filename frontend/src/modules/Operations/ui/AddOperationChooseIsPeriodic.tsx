@@ -2,13 +2,15 @@ import { Typography } from "@material-tailwind/react";
 import BackLink from "@/ui/BackLink.tsx";
 import Emoji from "@/ui/Emoji.tsx";
 import { NavLink } from "react-router-dom";
+import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 
 const AddOperationChooseIsPeriodic = () => {
+  const { t } = useTypedTranslation();
   return (
     <div className="flex flex-col gap-6">
       <BackLink to="/" />
       <Typography variant="h4" className="font-semibold">
-        Какой тип операции вы хотите добавить?
+        {t("which-operation-type-you-want-to-add")}
       </Typography>
       <div>
         <NavLink
@@ -19,7 +21,7 @@ const AddOperationChooseIsPeriodic = () => {
             <Emoji>⏲️</Emoji>
             <div>
               <Typography variant="h5" className="font-semibold">
-                Периодическая
+                {t("periodic")}
               </Typography>
             </div>
           </div>
@@ -48,7 +50,7 @@ const AddOperationChooseIsPeriodic = () => {
             <Emoji>🚨</Emoji>
             <div>
               <Typography variant="h5" className="font-semibold">
-                Одноразовая
+                {t("one-time")}
               </Typography>
             </div>
           </div>

@@ -1,7 +1,9 @@
 import { Typography } from "@material-tailwind/react";
 import { NavLink } from "react-router-dom";
+import {useTypedTranslation} from "@/helpers/useTypedTranslation.ts";
 
 const AddGoalItem = () => {
+  const {t} = useTypedTranslation()
   return (
     <NavLink
       to="/addGoal"
@@ -26,7 +28,7 @@ const AddGoalItem = () => {
         </span>
         <div>
           <Typography variant="h6" className="font-semibold ">
-            Новая цель
+            {t("new-goal")}
           </Typography>
         </div>
       </div>

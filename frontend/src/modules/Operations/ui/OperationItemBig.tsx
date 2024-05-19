@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import { OperationProps } from "@/modules/Operations/types/operation.ts";
 import { INCOME_EMOJIS } from "@/modules/Operations/types/income.ts";
 import { EXPENSE_EMOJIS } from "@/modules/Operations/types/expense.ts";
+import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 
 const OperationItemBig = () => {
   const currency = useGetCurrency();
@@ -21,7 +22,6 @@ const OperationItemBig = () => {
     id: 4,
   };
 
-  const { t } = useTranslation();
   const {
     kind,
     period_kind,
@@ -32,11 +32,12 @@ const OperationItemBig = () => {
     kind_operation,
   } = operation;
   const isPeriodic = !!period_value;
+  const { t } = useTypedTranslation();
   return (
     <div className="flex flex-col gap-8">
       <div className="grid grid-cols-3 w-full text-center">
         <BackLink to="/" />
-        <Typography variant="h6">Операция</Typography>
+        <Typography variant="h6">{t("operation")}</Typography>
         <div className="flex gap-6 ml-auto items-center">
           <button>
             <svg
@@ -93,7 +94,7 @@ const OperationItemBig = () => {
       <div className="border border-gray-300 rounded-xl py-4 px-6 flex flex-col gap-4">
         <div className="flex justify-between border-b items-center border-gray-300 pb-4">
           <Typography variant="paragraph" className="text-gray-700">
-            Сумма
+            {t("goal-sum")}
           </Typography>{" "}
           <Typography variant="h6">
             {value} {currency}
@@ -105,20 +106,20 @@ const OperationItemBig = () => {
           }`}
         >
           <Typography variant="paragraph" className="text-gray-700">
-            {isPeriodic
-              ? "Дата отсчета "
-              : "Дата " +
-                (kind_operation === "expense" ? "списания" : "пополнения")}
+            {isPeriodic ? t("start-date") : t("date-of-debiting/replenishment")}
           </Typography>{" "}
           <Typography variant="h6">{date.replace(/-/g, ".")}</Typography>
         </div>
         {isPeriodic && (
           <div className="flex justify-between items-center">
             <Typography variant="paragraph" className="text-gray-700">
-              Частота {kind_operation === "expense" ? "списания" : "пополнения"}
+              {kind_operation === "expense"
+                ? t("frequency-of-expense")
+                : t("frequency-of-income")}
             </Typography>
             <Typography variant="h6">
-              Каждые {period_value + " " + period_kind}
+              {t("repeat-every")}{" "}
+              {period_value + " " + (period_kind && t(period_kind))}
             </Typography>
           </div>
         )}

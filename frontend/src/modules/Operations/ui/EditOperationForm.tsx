@@ -5,6 +5,7 @@ import { Field, Form, Formik } from "formik";
 import DateInput from "@/ui/DateInput.tsx";
 import { OperationProps } from "@/modules/Operations/types/operation.ts";
 import Dropdown from "@/ui/Dropdown.tsx";
+import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 
 const EditOperationForm = () => {
   const navigate = useNavigate();
@@ -38,6 +39,8 @@ const EditOperationForm = () => {
 
   const period_kind_list = ["day", "week", "month", "year"];
 
+  const { t } = useTypedTranslation();
+
   const initialValues = {
     value: value,
     description: description,
@@ -49,7 +52,7 @@ const EditOperationForm = () => {
     period_value: period_value ? period_value : 0,
   };
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 max-w-2xl mx-auto mt-10">
       <div className="flex w-full text-center">
         <BackLink to={"/operations/" + id} />
         <Typography variant="h6" className="w-2/3 mx-auto">
@@ -60,38 +63,40 @@ const EditOperationForm = () => {
         {({ values, setFieldValue }) => {
           return (
             <Form className="flex gap-6 flex-col">
-              <Input label="Сумма" value={values.value} />
-              <Input label="Описание" value={values.description} />
               <DateInput
-                placeholder="Дата окончания"
+                placeholder={t("end-date")}
                 value={values.date}
                 setFieldValue={setFieldValue}
                 name="date"
               />
+              <Input label={t("goal-sum")} value={values.value} />
+              <Input label={t("description")} value={values.description} />
+
               {isPeriodic && (
-                <div className="flex gap-4 w-full items-center">
+                <div className="flex gap-2 w-full items-center">
                   <Typography
                     variant="paragraph"
-                    className="w-1/2 font-semibold text-blue-gray-700"
+                    className="w-1/2 text-sm font-semibold pl-4 text-blue-gray-700"
                   >
-                    Повторять каждые
+                    {t("repeat-every")}
                   </Typography>
                   <Field
-                    min={1}
                     name="period_value"
                     type="number"
-                    className="text-blue-gray-700 w-20 border outline-0 focus:border-black border-blue-gray-200 rounded-lg py-2 px-4"
+                    min={1}
+                    max={28}
+                    className="text-blue-gray-700 w-14 md:w-28 border outline-0 focus:border-black border-blue-gray-200 rounded-lg py-2 px-4"
                   />
                   <Dropdown
-                    className="w-28"
+                    className="w-28 md:w-40"
                     items={period_kind_list}
                     onClick={(el) => setFieldValue("kind", el)}
                   >
-                    {values.kind ? values.kind : "частота"}
+                    {values.kind ? values.kind : t("replenishment-frequency")}
                   </Dropdown>
                 </div>
               )}
-              <Button type="submit">Редактировать</Button>
+              <Button type="submit">{t("edit")}</Button>
             </Form>
           );
         }}

@@ -1,4 +1,4 @@
-export interface IUser {
+export interface PatchDto {
   name: string;
   username: string;
 }

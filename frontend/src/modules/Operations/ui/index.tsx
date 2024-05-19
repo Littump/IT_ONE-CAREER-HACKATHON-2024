@@ -7,6 +7,7 @@ import {
 } from "@/modules/Operations/types/operation.ts";
 import OperationItemMin from "@/modules/Operations/ui/OperationItemMin.tsx";
 import AddOperationItem from "@/modules/Operations/ui/AddOperationItem.tsx";
+import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
 
 interface Props {
   isFull?: boolean;
@@ -15,6 +16,8 @@ interface Props {
 const Operations = ({ isFull = true }: Props) => {
   const [showAll, setShowAll] = useState(!isFull);
   const [showPeriodic, setShowPeriodic] = useState(!isFull);
+
+  const { t } = useTypedTranslation();
 
   const operations: IOperation[] = [
     {
@@ -118,7 +121,7 @@ const Operations = ({ isFull = true }: Props) => {
         <>
           <div className="flex justify-between items-center">
             <Typography variant="h5" className="font-semibold">
-              Операции
+              {t("operations")}
             </Typography>
             <NavLink
               to="/operations"
@@ -142,18 +145,18 @@ const Operations = ({ isFull = true }: Props) => {
           </div>
           <NavLink to="/addOperation">
             <Button className="rounded-full my-2" size="sm">
-              Добавить
+              {t("add")}
             </Button>
           </NavLink>
           <button
             onClick={() => setShowAll((prev) => !prev)}
             className="text-blue-gray-700 underline text-sm ml-4"
           >
-            {showAll ? "Скрыть" : "Показать все"}
+            {showAll ? t("hide") : t("show-all")}
           </button>
         </>
       ) : (
-        <Typography variant="h5">Ваши операции</Typography>
+        <Typography variant="h5">{t("your-operations")}</Typography>
       )}
       <div className="my-4 flex flex-col ">
         {operations.slice(0, showAll ? operations.length : 2).map((el) => (
@@ -166,12 +169,12 @@ const Operations = ({ isFull = true }: Props) => {
           onClick={() => setShowPeriodic(true)}
           className="py-4 px-2 w-full text-blue-gray-700 text-md underline mx-auto"
         >
-          Показать периодические
+          {t("show-periodic")}
         </button>
       ) : (
         <div className="my-4 flex flex-col">
           <Typography variant="h5" className="font-semibold mt-6 mb-4">
-            Периодические операции
+            {t("periodic-operations")}
           </Typography>
           {operationsPeriodic.map((el) => (
             <OperationItemMin
@@ -184,7 +187,7 @@ const Operations = ({ isFull = true }: Props) => {
             onClick={() => setShowPeriodic(false)}
             className="py-4 px-2 w-full text-blue-gray-700 text-md underline mx-auto"
           >
-            Скрыть
+            {t("hide")}
           </button>
         </div>
       )}
