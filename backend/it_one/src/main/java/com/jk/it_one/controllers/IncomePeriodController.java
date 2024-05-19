@@ -2,7 +2,7 @@ package com.jk.it_one.controllers;
 
 import com.jk.it_one.enums.Currency;
 import com.jk.it_one.models.IncomePeriod;
-import com.jk.it_one.requestDtos.IncomePeriodDto;
+import com.jk.it_one.request_dtos.IncomePeriodDto;
 import com.jk.it_one.services.IncomePeriodService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

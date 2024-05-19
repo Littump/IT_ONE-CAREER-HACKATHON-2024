@@ -2,8 +2,8 @@ package com.jk.it_one.controllers;
 
 import com.jk.it_one.enums.Currency;
 import com.jk.it_one.models.Expense;
-import com.jk.it_one.requestDtos.ExpenseDto;
-import com.jk.it_one.requestDtos.ExpensePatchDto;
+import com.jk.it_one.request_dtos.ExpenseDto;
+import com.jk.it_one.request_dtos.ExpensePatchDto;
 import com.jk.it_one.services.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

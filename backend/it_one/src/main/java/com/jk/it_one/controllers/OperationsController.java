@@ -1,8 +1,8 @@
 package com.jk.it_one.controllers;
 
 import com.jk.it_one.enums.Currency;
-import com.jk.it_one.responceDtos.OperationDto;
-import com.jk.it_one.responceDtos.OperationPeriodDto;
+import com.jk.it_one.responce_dtos.OperationDto;
+import com.jk.it_one.responce_dtos.OperationPeriodDto;
 import com.jk.it_one.services.OperationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
