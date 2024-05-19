@@ -28,7 +28,10 @@ const ChooseOperationItem = ({
     >
       <div className="w-9/12 flex gap-4 justify-start items-center">
         <Emoji>
-          {kind === "expenses" ? EXPENSE_EMOJIS[type] : INCOME_EMOJIS[type]}
+          {
+            // @ts-ignore
+            kind === "expenses" ? EXPENSE_EMOJIS[type] : INCOME_EMOJIS[type]
+          }
         </Emoji>
         <div>
           <Typography variant="h5" className="font-semibold">

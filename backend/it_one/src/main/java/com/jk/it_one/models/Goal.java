@@ -1,13 +1,14 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.interfaces.WithBalanceAndValue;
+import com.jk.it_one.interfaces.Operation;
 import com.jk.it_one.enums.GoalKind;
-import com.jk.it_one.requestDtos.GoalDto;
-import com.jk.it_one.requestDtos.GoalPatchDto;
+import com.jk.it_one.request_dtos.GoalDto;
+import com.jk.it_one.request_dtos.GoalPatchDto;
 import com.jk.it_one.utils.MoneyCalculator;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -16,8 +17,9 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "goals")
-public class Goal implements WithBalanceAndValue<Goal> {
+public class Goal implements Operation<Goal> {
     @JsonIgnore
     @ManyToOne(
             fetch = FetchType.EAGER,
@@ -48,9 +50,6 @@ public class Goal implements WithBalanceAndValue<Goal> {
     @Column(name = "achieved", nullable = false)
     boolean achieved;
 
-    public Goal() {
-    }
-
     public Goal(GoalDto goalDto) {
         this.value = "0";
         this.goalValue = goalDto.getGoalValue();
@@ -60,11 +59,11 @@ public class Goal implements WithBalanceAndValue<Goal> {
         this.achieved = MoneyCalculator.compare(value, goalValue) >= 0;
     }
 
-    public Goal(GoalPatchDto goalDto) {
-        this.goalValue = goalDto.getGoalValue();
-        this.description = goalDto.getDescription();
-        this.kind = goalDto.getKind();
-        this.deadline = goalDto.getDeadline();
+    public Goal(GoalPatchDto goalPatchDto) {
+        this.goalValue = goalPatchDto.getGoalValue();
+        this.description = goalPatchDto.getDescription();
+        this.kind = goalPatchDto.getKind();
+        this.deadline = goalPatchDto.getDeadline();
     }
 
     public void patch(Goal goal) {

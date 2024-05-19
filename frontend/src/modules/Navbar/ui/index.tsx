@@ -23,7 +23,7 @@ export default function Navbar() {
       <div className=" mx-auto flex items-center justify-between text-blue-gray-900">
         <div className="flex gap-2 items-center">
           <NavLink to="/profile">
-            <IconButton variant="text">
+            <IconButton variant="text" className="hover:text-green-600 transition">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -61,7 +61,7 @@ export default function Navbar() {
         </div>
         <div className="flex gap-2">
           <NavLink to="/info">
-            <IconButton variant="text">
+            <IconButton variant="text" className="hover:text-green-600 transition">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -79,7 +79,7 @@ export default function Navbar() {
             </IconButton>
           </NavLink>
           <NavLink to="/">
-            <IconButton variant="text">
+            <IconButton variant="text" className="hover:text-green-600 transition">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

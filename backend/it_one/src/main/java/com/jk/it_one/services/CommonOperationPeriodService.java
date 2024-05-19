@@ -1,8 +1,8 @@
 package com.jk.it_one.services;
 
 import com.jk.it_one.repositories.OperationPeriodRepository;
-import com.jk.it_one.interfaces.WithBalanceAndValue;
-import com.jk.it_one.interfaces.WithBalanceValueAndStartDay;
+import com.jk.it_one.interfaces.Operation;
+import com.jk.it_one.interfaces.PeriodOperation;
 import com.jk.it_one.enums.Currency;
 import com.jk.it_one.exceptions.EntityNotFoundException;
 import com.jk.it_one.models.Balance;
@@ -22,7 +22,7 @@ import java.util.function.Function;
 @Transactional
 @Service
 @Setter
-public class CommonOperationPeriodService<V extends WithBalanceAndValue<V>, T extends WithBalanceValueAndStartDay<T>> {
+public class CommonOperationPeriodService<V extends Operation<V>, T extends PeriodOperation> {
     private final UserService userService;
     private final BalanceService balanceService;
     protected OperationPeriodRepository<T> operationPeriodRepository;
@@ -66,7 +66,8 @@ public class CommonOperationPeriodService<V extends WithBalanceAndValue<V>, T ex
 
     private T getOperationPeriod(long id, Principal principal) {
         T operationPeriod = operationPeriodRepository.findById(id).orElse(null);
-        if (operationPeriod == null || !Objects.equals(operationPeriod.getBalance().getUser().getUsername(), principal.getName())) {
+        if (operationPeriod == null
+                || !Objects.equals(operationPeriod.getBalance().getUser().getUsername(), principal.getName())) {
             throw new EntityNotFoundException(id);
         }
         return operationPeriod;

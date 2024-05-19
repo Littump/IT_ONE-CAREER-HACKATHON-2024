@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.util.Date;
 
 
-public class DataTimeUtilsTest {
+class DataTimeUtilsTest {
     @Test
-    public void testIsCurrentDay() {
+    void testIsCurrentDay() {
         Date date = new Date();
         assertTrue(DataTimeUtils.isCurrentDay(date));
 

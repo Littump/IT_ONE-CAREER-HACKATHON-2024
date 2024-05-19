@@ -1,12 +1,12 @@
-import { Button, Typography } from "@material-tailwind/react";
+import { Button, Spinner, Typography } from "@material-tailwind/react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import {
-  IOperation,
-  IOperationPeriodic,
-} from "@/modules/Operations/types/operation.ts";
 import OperationItemMin from "@/modules/Operations/ui/OperationItemMin.tsx";
 import AddOperationItem from "@/modules/Operations/ui/AddOperationItem.tsx";
+import { useTypedTranslation } from "@/helpers/useTypedTranslation.ts";
+import { useGetOperations } from "@/modules/Operations/api/useGetOperations.ts";
+import useGetCurrency from "@/helpers/useGetCurrency.ts";
+import { useGetOperationsPeriodic } from "@/modules/Operations/api/useGetOperationsPeriodic.ts";
 
 interface Props {
   isFull?: boolean;
@@ -15,110 +15,21 @@ interface Props {
 const Operations = ({ isFull = true }: Props) => {
   const [showAll, setShowAll] = useState(!isFull);
   const [showPeriodic, setShowPeriodic] = useState(!isFull);
+  const currency = useGetCurrency();
+  const { t } = useTypedTranslation();
 
-  const operations: IOperation[] = [
-    {
-      kind_operation: "expense",
-      kind: "food",
-      date: "22-01-2024",
-      value: 1500,
-      description: "макидональдс",
-      id: 1,
-    },
-    {
-      kind_operation: "expense",
-      kind: "education",
-      date: "22-01-2024",
-      value: 30000,
-      description: "спбгу",
-      id: 2,
-    },
-    {
-      kind_operation: "income",
-      kind: "business",
-      date: "22-01-2024",
-      value: 100,
-      description: "шаурмечная принесла рыбов",
-      id: 3,
-    },
-    {
-      kind_operation: "income",
-      kind: "gifts",
-      date: "22-01-2024",
-      value: 5000,
-      description: "подарили денежку",
-      id: 4,
-    },
-    {
-      kind_operation: "income",
-      kind: "salary",
-      date: "22-01-2024",
-      value: 30000,
-      description: "зп",
-      id: 4,
-    },
-  ];
-
-  const operationsPeriodic: IOperationPeriodic[] = [
-    {
-      kind_operation: "expense",
-      period_kind: "day",
-      period_value: 4,
-      kind: "food",
-      start_day: "22-01-2024",
-      value: 1500,
-      description: "макидональдс",
-      id: 1,
-    },
-    {
-      kind_operation: "expense",
-      kind: "education",
-      period_kind: "day",
-      period_value: 4,
-      start_day: "22-01-2024",
-      value: 30000,
-      description: "спбгу",
-      id: 2,
-    },
-    {
-      kind_operation: "income",
-      kind: "business",
-      period_kind: "day",
-      period_value: 4,
-      start_day: "22-01-2024",
-      value: 100,
-      description: "шаурмечная принесла рыбов",
-      id: 3,
-    },
-    {
-      kind_operation: "income",
-      kind: "gifts",
-      period_kind: "day",
-      period_value: 4,
-      start_day: "22-01-2024",
-      value: 5000,
-      description: "подарили денежку",
-      id: 4,
-    },
-    {
-      kind_operation: "income",
-      kind: "salary",
-      period_kind: "day",
-      period_value: 4,
-      start_day: "22-01-2024",
-      value: 30000,
-      description: "зп",
-      id: 4,
-    },
-  ];
-
+  const { data, isPending } = useGetOperations(currency);
+  const { data: periodicData, isPending: isPeriodicPending } =
+    useGetOperationsPeriodic(currency);
+  if (!data || !periodicData || isPeriodicPending || isPending)
+    return <Spinner />;
   return (
     <div className="rounded-2xl py-6 px-4 border border-gray-300">
       {isFull ? (
         <>
           <div className="flex justify-between items-center">
             <Typography variant="h5" className="font-semibold">
-              Операции
+              {t("operations")}
             </Typography>
             <NavLink
               to="/operations"
@@ -142,21 +53,21 @@ const Operations = ({ isFull = true }: Props) => {
           </div>
           <NavLink to="/addOperation">
             <Button className="rounded-full my-2" size="sm">
-              Добавить
+              {t("add")}
             </Button>
           </NavLink>
           <button
             onClick={() => setShowAll((prev) => !prev)}
             className="text-blue-gray-700 underline text-sm ml-4"
           >
-            {showAll ? "Скрыть" : "Показать все"}
+            {showAll ? t("hide") : t("show-all")}
           </button>
         </>
       ) : (
-        <Typography variant="h5">Ваши операции</Typography>
+        <Typography variant="h5">{t("your-operations")}</Typography>
       )}
       <div className="my-4 flex flex-col ">
-        {operations.slice(0, showAll ? operations.length : 2).map((el) => (
+        {data.data.slice(0, showAll ? data.data.length : 2).map((el) => (
           <OperationItemMin key={el.value + el.description} {...el} />
         ))}
       </div>
@@ -166,14 +77,14 @@ const Operations = ({ isFull = true }: Props) => {
           onClick={() => setShowPeriodic(true)}
           className="py-4 px-2 w-full text-blue-gray-700 text-md underline mx-auto"
         >
-          Показать периодические
+          {t("show-periodic")}
         </button>
       ) : (
         <div className="my-4 flex flex-col">
           <Typography variant="h5" className="font-semibold mt-6 mb-4">
-            Периодические операции
+            {t("periodic-operations")}
           </Typography>
-          {operationsPeriodic.map((el) => (
+          {periodicData.data.map((el) => (
             <OperationItemMin
               key={el.value + el.description}
               {...el}
@@ -184,7 +95,7 @@ const Operations = ({ isFull = true }: Props) => {
             onClick={() => setShowPeriodic(false)}
             className="py-4 px-2 w-full text-blue-gray-700 text-md underline mx-auto"
           >
-            Скрыть
+            {t("hide")}
           </button>
         </div>
       )}

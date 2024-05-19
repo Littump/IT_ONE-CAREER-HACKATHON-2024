@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const BackLink = ({ to }: { to: string }) => {
   return (
-    <NavLink to={to}>
+    <NavLink to={to} className="transition hover:text-green-600">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

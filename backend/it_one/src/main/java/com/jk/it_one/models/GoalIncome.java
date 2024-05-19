@@ -1,9 +1,10 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.requestDtos.GoalIncomeDto;
+import com.jk.it_one.request_dtos.GoalIncomeDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "goals_incomes")
 public class GoalIncome {
     @JsonIgnore
@@ -30,9 +32,6 @@ public class GoalIncome {
 
     @Column(name = "date", nullable = false)
     private Date date;
-
-    public GoalIncome() {
-    }
 
     public GoalIncome(GoalIncomeDto goalIncomeDto) {
         this.value = goalIncomeDto.getValue();

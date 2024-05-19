@@ -4,6 +4,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DataTimeUtils {
+    private DataTimeUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static boolean isCurrentDay(Date startDay) {
         Calendar startDayCalendar = Calendar.getInstance();
         Calendar currentDayCalendar = Calendar.getInstance();

@@ -13,7 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class IncomePeriodService extends CommonOperationPeriodService<Income, IncomePeriod> {
 
     @Autowired
-    public IncomePeriodService(@Lazy UserService userService, IncomePeriodRepository incomePeriodRepository, IncomeService incomeService, BalanceService balanceService) {
+    public IncomePeriodService(
+            @Lazy UserService userService,
+            IncomePeriodRepository incomePeriodRepository,
+            IncomeService incomeService,
+            BalanceService balanceService
+    ) {
         super(userService, balanceService);
         this.operationPeriodRepository = incomePeriodRepository;
         this.operationService = incomeService;

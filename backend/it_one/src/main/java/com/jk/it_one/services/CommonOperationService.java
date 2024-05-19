@@ -1,7 +1,7 @@
 package com.jk.it_one.services;
 
 import com.jk.it_one.repositories.OperationRepository;
-import com.jk.it_one.interfaces.WithBalanceAndValue;
+import com.jk.it_one.interfaces.Operation;
 import com.jk.it_one.enums.Currency;
 import com.jk.it_one.models.Balance;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 @Setter
 @Service
-public class CommonOperationService<T extends WithBalanceAndValue<T>> extends CommonService<T> {
+public class CommonOperationService<T extends Operation<T>> extends CommonService<T> {
     protected OperationRepository<T> operationRepository;
 
     protected boolean isExpense;

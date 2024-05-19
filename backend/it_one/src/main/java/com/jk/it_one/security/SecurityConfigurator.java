@@ -1,6 +1,7 @@
 package com.jk.it_one.security;
 
 import com.jk.it_one.services.UserService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +23,14 @@ import org.springframework.security.authentication.AuthenticationProvider;
 
 @Configuration
 @EnableWebSecurity
+@NoArgsConstructor
 public class SecurityConfigurator {
     private UserService userService;
     private TokenFilter tokenFilter;
-
-    public SecurityConfigurator() {}
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
 
     @Autowired
     public SecurityConfigurator(@Lazy UserService userService, TokenFilter tokenFilter) {
@@ -56,14 +60,13 @@ public class SecurityConfigurator {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) //TODO нужно включить (Это доп безопасность приложения)
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource((p) ->
+                        httpSecurityCorsConfigurer.configurationSource(ignored ->
                                 new CorsConfiguration().applyPermitDefaultValues()))
-//                .exceptionHandling(exceptions -> exceptions
-//                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/users", "/api/auth/token/login").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
