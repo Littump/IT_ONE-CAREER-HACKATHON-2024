@@ -1,4 +1,4 @@
-package com.jk.it_one.responceDtos;
+package com.jk.it_one.responce_dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jk.it_one.enums.GoalKind;

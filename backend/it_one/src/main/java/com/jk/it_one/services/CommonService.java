@@ -1,6 +1,6 @@
 package com.jk.it_one.services;
 
-import com.jk.it_one.interfaces.WithBalanceAndValue;
+import com.jk.it_one.interfaces.Operation;
 import com.jk.it_one.enums.Currency;
 import com.jk.it_one.exceptions.EntityNotFoundException;
 import com.jk.it_one.exceptions.NotEnoughMoneyException;
@@ -15,11 +15,10 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.*;
 
 @Service
-public class CommonService<T extends WithBalanceAndValue<T>> {
+public class CommonService<T extends Operation<T>> {
     protected final UserService userService;
     protected final BalanceService balanceService;
 
@@ -29,24 +28,15 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
         this.balanceService = balanceService;
     }
 
-    //balance.v + ent.val - old.v
     protected T saveWithBalanceUpdate(
             T entity,
             Balance balance,
             String oldValue,
-            Function<T, T> saver
-    ) {
-        return saveWithBalanceUpdate(entity, balance, oldValue, saver, false);
-    }
-
-    protected T saveWithBalanceUpdate(
-            T entity,
-            Balance balance,
-            String oldValue,
-            Function<T, T> saver,
+            UnaryOperator<T> saver,
             boolean reversed
     ) {
-        balance.setValue(reversed ? (MoneyCalculator.add(MoneyCalculator.sub(balance.getValue(), entity.getValue()), oldValue))
+        balance.setValue(reversed
+                ? (MoneyCalculator.add(MoneyCalculator.sub(balance.getValue(), entity.getValue()), oldValue))
                 : MoneyCalculator.sub(MoneyCalculator.add(balance.getValue(), entity.getValue()), oldValue));
         if (MoneyCalculator.compare(balance.getValue(), "0") < 0) {
             throw new NotEnoughMoneyException(balance.getId());
@@ -59,10 +49,9 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
             T entity,
             Principal principal,
             Currency currency,
-            String oldValue,
-            Function<T, T> saver
+            UnaryOperator<T> saver
     ) {
-        return saveWithBalanceUpdate(entity, principal, currency, oldValue, saver, false);
+        return saveWithBalanceUpdate(entity, principal, currency, "0", saver, false);
     }
 
     protected T saveWithBalanceUpdate(
@@ -70,7 +59,7 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
             Principal principal,
             Currency currency,
             String oldValue,
-            Function<T, T> saver,
+            UnaryOperator<T> saver,
             boolean reversed
     ) {
         User user = userService.findMe(principal);
@@ -97,7 +86,7 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     protected T findById(
             long id,
             Principal principal,
-            Function<Long, Optional<T>> finder
+            LongFunction<Optional<T>> finder
     ) {
         User user = userService.findMe(principal);
         return findById(id, user, finder);
@@ -106,7 +95,7 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     protected T findById(
             long id,
             User user,
-            Function<Long, Optional<T>> finder
+            LongFunction<Optional<T>> finder
     ) {
         T entity = finder.apply(id).orElse(null);
         if (entity == null || !Objects.equals(entity.getBalance().getUser().getId(), user.getId())) {
@@ -118,9 +107,9 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     protected T update(
             long id,
             Principal principal,
-            Function<Long, Optional<T>> finder,
+            LongFunction<Optional<T>> finder,
             Consumer<T> patcher,
-            Function<T, T> saver
+            UnaryOperator<T> saver
     ) {
         return update(id, principal, finder, patcher, saver, false);
     }
@@ -128,9 +117,9 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     protected T update(
             long id,
             Principal principal,
-            Function<Long, Optional<T>> finder,
+            LongFunction<Optional<T>> finder,
             Consumer<T> patcher,
-            Function<T, T> saver,
+            UnaryOperator<T> saver,
             boolean reversed
     ) {
         User user = userService.findMe(principal);
@@ -144,8 +133,8 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     protected String delete(
             long id,
             Principal principal,
-            Function<Long, Optional<T>> finder,
-            Consumer<Long> deleter
+            LongFunction<Optional<T>> finder,
+            LongConsumer deleter
     ) {
         return delete(id, principal, finder, deleter, false);
     }
@@ -153,8 +142,8 @@ public class CommonService<T extends WithBalanceAndValue<T>> {
     protected String delete(
             long id,
             Principal principal,
-            Function<Long, Optional<T>> finder,
-            Consumer<Long> deleter,
+            LongFunction<Optional<T>> finder,
+            LongConsumer deleter,
             boolean reversed
     ) {
         User user = userService.findMe(principal);

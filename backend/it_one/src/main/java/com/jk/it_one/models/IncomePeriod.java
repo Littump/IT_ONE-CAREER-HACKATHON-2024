@@ -1,12 +1,13 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.interfaces.WithBalanceValueAndStartDay;
+import com.jk.it_one.interfaces.PeriodOperation;
 import com.jk.it_one.enums.IncomeKind;
 import com.jk.it_one.enums.Period;
-import com.jk.it_one.requestDtos.IncomePeriodDto;
+import com.jk.it_one.request_dtos.IncomePeriodDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -14,8 +15,9 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "incomes_period")
-public class IncomePeriod implements WithBalanceValueAndStartDay<IncomePeriod> {
+public class IncomePeriod implements PeriodOperation {
     @JsonIgnore
     @ManyToOne(
             fetch = FetchType.EAGER,
@@ -45,9 +47,6 @@ public class IncomePeriod implements WithBalanceValueAndStartDay<IncomePeriod> {
 
     @Column(name = "period_kind", nullable = false)
     private Period periodKind;
-
-    public IncomePeriod() {
-    }
 
     public IncomePeriod(IncomePeriodDto incomePeriodDto) {
         this.value = incomePeriodDto.getValue();

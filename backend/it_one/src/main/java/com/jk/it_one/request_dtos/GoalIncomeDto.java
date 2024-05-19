@@ -1,4 +1,4 @@
-package com.jk.it_one.requestDtos;
+package com.jk.it_one.request_dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jk.it_one.validation.PositiveNumberConstraint;

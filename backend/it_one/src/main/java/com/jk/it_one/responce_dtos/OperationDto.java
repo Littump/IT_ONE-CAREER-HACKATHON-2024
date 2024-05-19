@@ -1,16 +1,9 @@
-package com.jk.it_one.responceDtos;
+package com.jk.it_one.responce_dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jk.it_one.enums.IncomeKind;
-import com.jk.it_one.enums.KindOperation;
 import com.jk.it_one.enums.OperationKind;
-import com.jk.it_one.models.Balance;
 import com.jk.it_one.models.Expense;
 import com.jk.it_one.models.Income;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.util.Date;

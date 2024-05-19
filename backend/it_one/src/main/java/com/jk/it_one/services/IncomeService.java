@@ -12,7 +12,11 @@ import org.springframework.stereotype.Service;
 public class IncomeService extends CommonOperationService<Income> {
 
     @Autowired
-    public IncomeService(@Lazy UserService userService, IncomeRepository incomeRepository, BalanceService balanceService) {
+    public IncomeService(
+            @Lazy UserService userService,
+            IncomeRepository incomeRepository,
+            BalanceService balanceService
+    ) {
         super(userService, balanceService);
         this.operationRepository = incomeRepository;
         this.isExpense = false;

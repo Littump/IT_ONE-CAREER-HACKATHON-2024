@@ -1,7 +1,7 @@
-package com.jk.it_one.requestDtos;
+package com.jk.it_one.request_dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jk.it_one.enums.IncomeKind;
+import com.jk.it_one.enums.ExpenseKind;
 import com.jk.it_one.validation.PositiveNumberConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +11,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class IncomeDto {
+public class ExpenseDto {
     @NotBlank(message = "'value' shouldn't be empty")
     @PositiveNumberConstraint
     @JsonProperty("value")
@@ -19,7 +19,7 @@ public class IncomeDto {
 
     @NotNull(message = "'kind' shouldn't be null")
     @JsonProperty("kind")
-    private IncomeKind kind;
+    private ExpenseKind kind;
 
     @JsonProperty("description")
     private String description;

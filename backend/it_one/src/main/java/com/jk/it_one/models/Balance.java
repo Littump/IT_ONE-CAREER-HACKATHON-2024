@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jk.it_one.enums.Currency;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "balances")
 public class Balance {
     @JsonIgnore
@@ -20,7 +22,6 @@ public class Balance {
     )
     @JoinColumn(name = "user_id", nullable = false)
     User user;
-
 
     @JsonProperty("id")
     @Id
@@ -35,8 +36,6 @@ public class Balance {
     @Column(name = "currency", nullable = false)
     Currency currency;
 
-    public Balance() {
-    }
     public Balance(User user, String value, Currency currency) {
         this.user = user;
         this.value = value;

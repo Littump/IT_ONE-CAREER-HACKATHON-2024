@@ -1,12 +1,13 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.interfaces.WithBalanceValueAndStartDay;
+import com.jk.it_one.interfaces.PeriodOperation;
 import com.jk.it_one.enums.ExpenseKind;
 import com.jk.it_one.enums.Period;
-import com.jk.it_one.requestDtos.ExpensePeriodDto;
+import com.jk.it_one.request_dtos.ExpensePeriodDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -14,8 +15,9 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "expenses_period")
-public class ExpensePeriod implements WithBalanceValueAndStartDay<ExpensePeriod> {
+public class ExpensePeriod implements PeriodOperation {
     @JsonIgnore
     @ManyToOne(
             fetch = FetchType.EAGER,
@@ -46,15 +48,12 @@ public class ExpensePeriod implements WithBalanceValueAndStartDay<ExpensePeriod>
     @Column(name = "period_kind", nullable = false)
     private Period periodKind;
 
-    public ExpensePeriod() {
-    }
-
-    public ExpensePeriod(ExpensePeriodDto expencePeriodDto) {
-        this.value = expencePeriodDto.getValue();
-        this.kind = expencePeriodDto.getKind();
-        this.description = expencePeriodDto.getDescription();
-        this.startDay = expencePeriodDto.getStartDay();
-        this.periodValue = expencePeriodDto.getPeriodValue();
-        this.periodKind = expencePeriodDto.getPeriodKind();
+    public ExpensePeriod(ExpensePeriodDto expensePeriodDto) {
+        this.value = expensePeriodDto.getValue();
+        this.kind = expensePeriodDto.getKind();
+        this.description = expensePeriodDto.getDescription();
+        this.startDay = expensePeriodDto.getStartDay();
+        this.periodValue = expensePeriodDto.getPeriodValue();
+        this.periodKind = expensePeriodDto.getPeriodKind();
     }
 }

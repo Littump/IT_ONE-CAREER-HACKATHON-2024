@@ -1,13 +1,12 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.requestDtos.RegistrationDto;
-import com.jk.it_one.requestDtos.UserPatchDto;
+import com.jk.it_one.request_dtos.RegistrationDto;
+import com.jk.it_one.request_dtos.UserPatchDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -16,6 +15,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "users")
 public class User {
     @Id
@@ -31,9 +31,6 @@ public class User {
     @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
-
-    public User() {
-    }
 
     public User(RegistrationDto registrationRequest) {
         this.username = registrationRequest.getUsername();

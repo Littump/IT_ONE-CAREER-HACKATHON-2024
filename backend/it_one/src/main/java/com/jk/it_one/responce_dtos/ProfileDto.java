@@ -1,9 +1,10 @@
-package com.jk.it_one.responceDtos;
+package com.jk.it_one.responce_dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jk.it_one.models.Balance;
 import com.jk.it_one.models.Goal;
 import com.jk.it_one.models.User;
+import com.jk.it_one.utils.MoneyCalculator;
 import lombok.Data;
 
 import java.util.List;
@@ -28,11 +29,19 @@ public class ProfileDto {
     @JsonProperty("goals")
     private List<GoalDto> goals;
 
-    public ProfileDto(User user, Balance balance, List<Balance> balances, List<OperationDto> operations, List<Goal> goals) { //TODO перевести всё к одному балансу
+    public ProfileDto(
+            User user,
+            Balance balance,
+            List<Balance> balances,
+            List<OperationDto> operations,
+            List<Goal> goals
+    ) {
         this.username = user.getUsername();
         this.name = user.getName();
         this.balance = balance.getValue();
-        this.allBalance = "239";
+        this.allBalance = balances.stream()
+                .map(b -> MoneyCalculator.convert(b.getCurrency(), balance.getCurrency(), b.getValue()))
+                .reduce(MoneyCalculator::add).orElse("0");
         this.operations = operations;
         this.goals = goals.stream().map(GoalDto::new).toList();
     }

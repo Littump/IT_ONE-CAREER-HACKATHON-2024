@@ -1,12 +1,13 @@
 package com.jk.it_one.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.jk.it_one.interfaces.WithBalanceAndValue;
+import com.jk.it_one.interfaces.Operation;
 import com.jk.it_one.enums.ExpenseKind;
-import com.jk.it_one.requestDtos.ExpenseDto;
-import com.jk.it_one.requestDtos.ExpensePatchDto;
+import com.jk.it_one.request_dtos.ExpenseDto;
+import com.jk.it_one.request_dtos.ExpensePatchDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -15,8 +16,9 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "expenses")
-public class Expense implements WithBalanceAndValue<Expense> {
+public class Expense implements Operation<Expense> {
     @JsonIgnore
     @ManyToOne(
             fetch = FetchType.EAGER,
@@ -41,10 +43,6 @@ public class Expense implements WithBalanceAndValue<Expense> {
     @Column(name = "date", nullable = false)
     private Date date;
 
-
-    public Expense() {
-    }
-
     public Expense(ExpenseDto expenseDto) {
         this.value = expenseDto.getValue();
         this.kind = expenseDto.getKind();
@@ -52,11 +50,11 @@ public class Expense implements WithBalanceAndValue<Expense> {
         this.date = expenseDto.getDate();
     }
 
-    public Expense(ExpensePatchDto expenseDto) {
-        this.value = expenseDto.getValue();
-        this.kind = expenseDto.getKind();
-        this.description = expenseDto.getDescription();
-        this.date = expenseDto.getDate();
+    public Expense(ExpensePatchDto expensePatchDto) {
+        this.value = expensePatchDto.getValue();
+        this.kind = expensePatchDto.getKind();
+        this.description = expensePatchDto.getDescription();
+        this.date = expensePatchDto.getDate();
     }
 
     public Expense(ExpensePeriod expensePeriod) {
@@ -67,10 +65,10 @@ public class Expense implements WithBalanceAndValue<Expense> {
     }
 
     @Override
-    public void patch(Expense newValue) {
-        this.value = Objects.requireNonNullElse(newValue.getValue(), this.value);
-        this.kind = Objects.requireNonNullElse(newValue.getKind(), this.kind);
-        this.description = Objects.requireNonNullElse(newValue.getDescription(), this.description);
-        this.date = Objects.requireNonNullElse(newValue.getDate(), this.date);
+    public void patch(Expense expense) {
+        this.value = Objects.requireNonNullElse(expense.getValue(), this.value);
+        this.kind = Objects.requireNonNullElse(expense.getKind(), this.kind);
+        this.description = Objects.requireNonNullElse(expense.getDescription(), this.description);
+        this.date = Objects.requireNonNullElse(expense.getDate(), this.date);
     }
 }

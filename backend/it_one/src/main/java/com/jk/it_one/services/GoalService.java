@@ -6,8 +6,7 @@ import com.jk.it_one.exceptions.NotEnoughMoneyException;
 import com.jk.it_one.models.*;
 import com.jk.it_one.repositories.GoalIncomeRepository;
 import com.jk.it_one.repositories.GoalRepository;
-import com.jk.it_one.requestDtos.GoalDto;
-import com.jk.it_one.requestDtos.GoalIncomeDto;
+import com.jk.it_one.request_dtos.GoalIncomeDto;
 import com.jk.it_one.utils.MoneyCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -39,7 +38,7 @@ public class GoalService extends CommonService<Goal> {
     }
 
     public Goal save(Goal goal, Principal principal, Currency currency) {
-        return saveWithBalanceUpdate(goal, principal, currency, "0", goalRepository::save);
+        return saveWithBalanceUpdate(goal, principal, currency, goalRepository::save);
     }
 
     public List<Goal> findAll(Principal principal, Currency currency) {

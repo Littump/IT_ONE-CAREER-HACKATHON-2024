@@ -4,8 +4,8 @@ import com.jk.it_one.enums.Currency;
 import com.jk.it_one.models.Balance;
 import com.jk.it_one.models.Expense;
 import com.jk.it_one.models.Income;
-import com.jk.it_one.responceDtos.OperationDto;
-import com.jk.it_one.responceDtos.OperationPeriodDto;
+import com.jk.it_one.responce_dtos.OperationDto;
+import com.jk.it_one.responce_dtos.OperationPeriodDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +19,18 @@ import java.util.stream.Stream;
 
 @Transactional
 @Service
-public class OperationsService { //TODO refactor
+public class OperationsService {
     private final IncomeService incomeService;
     private final ExpenseService expenseService;
     private final IncomePeriodService incomePeriodService;
     private final ExpensePeriodService expensePeriodService;
 
-    public OperationsService(IncomeService incomeService, ExpenseService expenseService, IncomePeriodService incomePeriodService, ExpensePeriodService expensePeriodService) {
+    public OperationsService(
+            IncomeService incomeService,
+            ExpenseService expenseService,
+            IncomePeriodService incomePeriodService,
+            ExpensePeriodService expensePeriodService
+    ) {
         this.incomeService = incomeService;
         this.expenseService = expenseService;
         this.incomePeriodService = incomePeriodService;

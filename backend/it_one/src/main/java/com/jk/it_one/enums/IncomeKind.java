@@ -1,5 +1,5 @@
 package com.jk.it_one.enums;
 
 public enum IncomeKind {
-    TEST_KIND
+    SALARY, PART_TIME_JOB, PROFIT, PASSIVE, GIFTS, INVESTMENT
 }
