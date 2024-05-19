@@ -2,9 +2,10 @@ version: "3.3"
 
 services:
   backend:
-    build: ../backend/it_one/
+    build: ./
     volumes:
-      - ~/.postgresql:~/.postgresql
+      - ~/.postgresql/root.crt:/root/.postgresql/root.crt
+    env_file: ./src/main/resources/.env
   nginx:
     image: nginx:1.19.3
     restart: always
