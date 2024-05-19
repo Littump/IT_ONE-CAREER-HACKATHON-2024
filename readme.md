@@ -1,3 +1,27 @@
+## Как поднять проект
+
+1. **Собрать образы локально**
+   - Клоним и переходим в папку infra-local:
+     ```
+     git clone https://github.com/Littump/IT_ONE-CAREER-HACKATHON-2024.git
+     cd infra-local
+     ```
+   - Поднимаем docker-compose
+     ```
+     docker compose up -d
+     ```
+2. **Спушить образы с docker.hub**
+   - Клоним и переходим в папку infra:
+     ```
+     git clone https://github.com/Littump/IT_ONE-CAREER-HACKATHON-2024.git
+     cd infra
+     ```
+   - Поднимаем docker-compose
+     ```
+     docker compose up -d
+     ```
+---
+
 ## Правила разработки
 Техническая документация, или правила разработки
 
