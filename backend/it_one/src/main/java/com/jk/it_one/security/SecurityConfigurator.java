@@ -25,6 +25,10 @@ import org.springframework.security.authentication.AuthenticationProvider;
 public class SecurityConfigurator {
     private UserService userService;
     private TokenFilter tokenFilter;
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
 
     public SecurityConfigurator() {}
 
@@ -64,6 +68,7 @@ public class SecurityConfigurator {
 //                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/users", "/api/auth/token/login").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -25,9 +25,3 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/dist:/usr/share/nginx/html/
-#    depends_on:
-#      - frontend
-#  frontend:
-#    build: ../frontend/
-#    volumes:
-#      - ../frontend/:/app/result_build/

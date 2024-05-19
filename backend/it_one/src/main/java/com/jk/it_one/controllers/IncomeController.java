@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@RequestMapping("/api")
+@RequestMapping("/api/incomes")
 @RestController
 public class IncomeController {
     private final IncomeService incomeService;
@@ -22,29 +22,29 @@ public class IncomeController {
         this.incomeService = incomeService;
     }
 
-    @PostMapping("/incomes")
+    @PostMapping
     Income addIncome(@Valid @RequestBody IncomeDto incomeDto, Principal principal, @RequestParam Currency currency) {
         Income income = new Income(incomeDto);
         return incomeService.save(income, principal, currency);
     }
 
-    @GetMapping("/incomes")
+    @GetMapping
     List<Income> getIncomes(Principal principal, @RequestParam Currency currency) {
         return incomeService.findAll(principal, currency);
     }
 
-    @GetMapping("/incomes/{id}")
+    @GetMapping("/{id}")
     Income getIncome(Principal principal, @PathVariable("id") long id) {
         return incomeService.findById(id, principal);
     }
 
-    @PatchMapping("/incomes/{id}")
+    @PatchMapping("/{id}")
     Income patchIncome(@Valid @RequestBody IncomePatchDto incomeDto, Principal principal, @PathVariable("id") long id) {
         Income income = new Income(incomeDto);
         return incomeService.update(id, income, principal);
     }
 
-    @DeleteMapping("/incomes/{id}")
+    @DeleteMapping("/{id}")
     String deleteIncome(Principal principal, @PathVariable("id") long id) {
         return incomeService.delete(id, principal);
     }
